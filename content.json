@@ -11,253 +11,27 @@
       "name": "Analog",
       "color": "#3CC8E2",
       "blurb": "RF, Power, Comms and IC design. The continuous world, and the careers built on it.\n\n",
-      "primer": {
-        
-        "lead": "Analog is the art of working with a continuous, imperfect world. Signals are voltages and currents that can take any value, every component is non-ideal, and every design is a negotiation between competing goals.",
-        "philosophy": [
-          "You will probably spend most of your time \"building intuition\". The term will get thrown around a lot, and for good reason. Your value comes from the fact that you can predict what the circuit will do before you analyze/build it. Otherwise, any run of the mill SPICE tool is worth more than you. \n\nFIRST LESSON: BUILD INTUITION. ",
-          "The analog you will study is based on a \"model\". Once you have an ideal model, you can start adding non-idealities. The model can span from something as simple as a capcitor to something more complex as an Op-Amp. Your entire preliminary journey is defined by how well you understand \"THE MODEL\".  \n\nSECOND LESSON: KNOW EVERY PART OF THE MODEL",
-          "You're fucked once you resort to Laplace domain. Laplace domain conversion is useful only because it converts differential equations to algebraic forms and modern computers are very good at handling algebraic equations. By resorting to  s-domain you get 0% idea of how the circuit works and 100% idea of how to take up 3 pages worth of calculations.\n\nTHIRD LESSON: NEVER GO TO S-DOMAIN"
-        ],
-        "work": [
-          {
-            "title": "Specify",
-            "text": "Turn a system need into numbers: gain, bandwidth, noise, power, supply range, temperature range."
-          },
-          {
-            "title": "Choose and size",
-            "text": "Pick a circuit topology and size transistors and passives with hand analysis."
-          },
-          {
-            "title": "Simulate",
-            "text": "Check it in SPICE across DC, AC, transient and noise, then across process corners, temperature and mismatch."
-          },
-          {
-            "title": "Lay it out",
-            "text": "Draw the physical layout with matching, symmetry and parasitics in mind, then re-simulate with extracted parasitics."
-          },
-          {
-            "title": "Verify and tape out",
-            "text": "Pass design-rule and layout-versus-schematic checks and sign off before fabrication."
-          },
-          {
-            "title": "Bring up the silicon",
-            "text": "Measure real chips or boards in the lab, compare against simulation and debug the gaps."
-          }
-        ],
-        "roles": [
-          {
-            "name": "Analog IC design engineer",
-            "does": "Designs amplifiers, voltage references, data converters, PLLs and other blocks at transistor level.",
-            "tools": "Cadence Virtuoso, Spectre, hand analysis"
-          },
-          {
-            "name": "Analog layout engineer",
-            "does": "Turns schematics into physical layout, handling matching, parasitics and design rules.",
-            "tools": "Virtuoso Layout, Calibre"
-          },
-          {
-            "name": "RF and mixed-signal engineer",
-            "does": "Designs radio front ends (LNAs, mixers, oscillators) or ADCs and DACs that bridge analog and digital.",
-            "tools": "Spectre RF, ADS, MATLAB"
-          },
-          {
-            "name": "Power electronics / power management engineer",
-            "does": "Designs DC-DC converters, regulators and battery chargers, on chips or on boards.",
-            "tools": "LTspice, PLECS, oscilloscopes"
-          },
-          {
-            "name": "Board-level hardware engineer",
-            "does": "Designs PCBs and signal chains: sensor front ends, filters, power rails.",
-            "tools": "KiCad or Altium, LTspice, lab instruments"
-          },
-          {
-            "name": "Characterization / validation engineer",
-            "does": "Tests silicon in the lab against its spec and automates measurements.",
-            "tools": "Scopes, spectrum analyzers, Python"
-          }
-        ],
-        "next": "With the big picture in place, go to Career for interview prep and role guides, or General for playlists, tools and projects."
-      },
-      "career": [
+      "sections": [
         {
-          "id": "core-interviews",
-          "name": "Core analog interviews",
-          "term": "Guide",
-          "status": "ready",
-          "sample": true,
-          "about": "What core electronics companies ask in analog and circuit rounds, and how to prepare for them in four to six weeks.",
-          "why": "Analog questions show up in nearly every core hardware interview, even for digital and embedded roles. Doing well here opens the most doors.",
-          "units": [
-            {
-              "title": "Fundamentals they always start with",
-              "topics": [
-                "KCL / KVL by inspection",
-                "RC and RL transients",
-                "Thevenin in your head"
-              ]
-            },
-            {
-              "title": "Diodes and BJTs",
-              "topics": [
-                "Rectifier and clipper outputs",
-                "Biasing",
-                "Small-signal gain"
-              ]
-            },
-            {
-              "title": "MOSFETs",
-              "topics": [
-                "Regions of operation",
-                "gm and ro",
-                "Body effect"
-              ]
-            },
-            {
-              "title": "Amplifiers",
-              "topics": [
-                "CS / CG / CD gain by inspection",
-                "Differential pair",
-                "Current mirrors"
-              ]
-            },
-            {
-              "title": "Op-amps",
-              "topics": [
-                "Golden rules",
-                "Non-ideal effects",
-                "Filters and integrators"
-              ]
-            },
-            {
-              "title": "Frequency response and feedback",
-              "topics": [
-                "Miller effect",
-                "Poles and stability",
-                "Phase margin"
-              ]
-            }
-          ],
-          "notes": [
-            {
-              "kind": "Book",
-              "title": "Fundamentals of Microelectronics",
-              "by": "Behzad Razavi",
-              "note": "The best book for building the intuition interviewers test."
-            },
-            {
-              "kind": "Book",
-              "title": "Microelectronic Circuits",
-              "by": "Sedra & Smith",
-              "note": "Use it for depth on any topic you get stuck on."
-            },
-            {
-              "kind": "Book",
-              "title": "The Art of Electronics",
-              "by": "Horowitz & Hill",
-              "note": "Practical, real-world circuits. Great for 'how would you build this' questions."
-            }
-          ],
-          "playlists": [
-            {
-              "title": "Electronics 1 and 2 lectures",
-              "by": "Behzad Razavi",
-              "note": "Watch the amplifier and frequency-response lectures first.",
-              "pick": true
-            },
-            {
-              "title": "Analog circuits explained",
-              "by": "ALL ABOUT ELECTRONICS",
-              "note": "Quick refreshers on individual circuits the night before.",
-              "pick": false
-            }
-          ],
-          "pyqs": [
-            {
-              "year": "2025",
-              "exam": "Sample · technical round 1"
-            },
-            {
-              "year": "2025",
-              "exam": "Sample · circuit design round"
-            },
-            {
-              "year": "2024",
-              "exam": "Sample · technical round 2"
-            }
-          ],
-          "tips": [
-            {
-              "text": "Say your reasoning out loud. They care more about how you approach a circuit than the final number.",
-              "by": "Sample tip"
-            },
-            {
-              "text": "Practise finding gain by inspection until it's instant. It comes up in almost every round.",
-              "by": "Sample tip"
-            },
-            {
-              "text": "Have one project you can explain down to the component values. They will dig into it.",
-              "by": "Sample tip"
-            }
-          ]
+          "id": "philosophy",
+          "title": "Philosophy",
+          "summary": "How people in this field think, and what the work actually looks like.",
+          "draft": true,
+          "body": "Analog is the art of working with a continuous, imperfect world. Signals are voltages and currents that can take any value, every component is non-ideal, and every design is a negotiation between competing goals.\n\nYou will probably spend most of your time \"building intuition\". The term will get thrown around a lot, and for good reason. Your value comes from the fact that you can predict what the circuit will do before you analyze/build it. Otherwise, any run of the mill SPICE tool is worth more than you. \n\nFIRST LESSON: BUILD INTUITION. \n\nThe analog you will study is based on a \"model\". Once you have an ideal model, you can start adding non-idealities. The model can span from something as simple as a capcitor to something more complex as an Op-Amp. Your entire preliminary journey is defined by how well you understand \"THE MODEL\".  \n\nSECOND LESSON: KNOW EVERY PART OF THE MODEL\n\nYou're fucked once you resort to Laplace domain. Laplace domain conversion is useful only because it converts differential equations to algebraic forms and modern computers are very good at handling algebraic equations. By resorting to  s-domain you get 0% idea of how the circuit works and 100% idea of how to take up 3 pages worth of calculations.\n\nTHIRD LESSON: NEVER GO TO S-DOMAIN\n\n## What the work looks like\n1. **Specify.** Turn a system need into numbers: gain, bandwidth, noise, power, supply range, temperature range.\n2. **Choose and size.** Pick a circuit topology and size transistors and passives with hand analysis.\n3. **Simulate.** Check it in SPICE across DC, AC, transient and noise, then across process corners, temperature and mismatch.\n4. **Lay it out.** Draw the physical layout with matching, symmetry and parasitics in mind, then re-simulate with extracted parasitics.\n5. **Verify and tape out.** Pass design-rule and layout-versus-schematic checks and sign off before fabrication.\n6. **Bring up the silicon.** Measure real chips or boards in the lab, compare against simulation and debug the gaps."
         },
         {
-          "id": "analog-ic-roles",
-          "name": "Analog & mixed-signal IC roles",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
+          "id": "learning-route",
+          "title": "Learning route",
+          "summary": "What to learn, in what order, with the resources worth your time.",
+          "draft": true,
+          "body": "Work through these stages in order. Each one builds on the last.\n\n## 1. Foundations\n- Circuit theory: KCL and KVL, Thevenin and Norton, RC, RL and RLC transients, phasors.\n- Semiconductor basics: the pn junction, diodes, and how BJTs and MOSFETs work.\n\n## 2. Core analog circuits\n- Biasing, small-signal models and single-stage amplifiers.\n- Current mirrors, differential pairs, frequency response and feedback.\n- Op-amps and where the ideal model breaks down.\n- Read: *Fundamentals of Microelectronics* (Razavi), with *Microelectronic Circuits* (Sedra & Smith) for depth.\n\n## 3. Simulate and build\n- Simulate every circuit you study in LTspice.\n- Build a few on a breadboard and measure them with an oscilloscope. The gap between simulation and reality is where the learning happens.\n\n## 4. Pick a direction\n- **Analog and mixed-signal IC design:** *Design of Analog CMOS Integrated Circuits* (Razavi), and Cadence Virtuoso if your college has it.\n- **RF:** transmission lines, S-parameters, the Smith chart, LNAs and mixers.\n- **Power electronics:** buck and boost converters, magnetics and control loops.\n\n## 5. One project you can explain completely\nA discrete amplifier, an active filter or a buck converter, understood down to every component value."
         },
         {
-          "id": "rf-roles",
-          "name": "RF & communication roles",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "power-roles",
-          "name": "Power electronics roles",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "gate",
-          "name": "GATE ECE",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
-        }
-      ],
-      "general": [
-        {
-          "id": "analog-playlists",
-          "name": "Best analog playlists",
-          "term": "List",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "spice",
-          "name": "LTspice & simulation tools",
-          "term": "Tools",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "analog-projects",
-          "name": "Projects that teach analog",
-          "term": "Advice",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "analog-books",
-          "name": "Books worth owning",
-          "term": "List",
-          "status": "soon",
-          "sample": false
+          "id": "careers",
+          "title": "Careers",
+          "summary": "The roles you can hold once you are in, and what each one does day to day.",
+          "draft": true,
+          "body": "## Roles you can hold\n- **Analog IC design engineer.** Designs amplifiers, voltage references, data converters, PLLs and other blocks at transistor level. *Tools: Cadence Virtuoso, Spectre, hand analysis.*\n- **Analog layout engineer.** Turns schematics into physical layout, handling matching, parasitics and design rules. *Tools: Virtuoso Layout, Calibre.*\n- **RF and mixed-signal engineer.** Designs radio front ends (LNAs, mixers, oscillators) or ADCs and DACs that bridge analog and digital. *Tools: Spectre RF, ADS, MATLAB.*\n- **Power electronics / power management engineer.** Designs DC-DC converters, regulators and battery chargers, on chips or on boards. *Tools: LTspice, PLECS, oscilloscopes.*\n- **Board-level hardware engineer.** Designs PCBs and signal chains: sensor front ends, filters, power rails. *Tools: KiCad or Altium, LTspice, lab instruments.*\n- **Characterization / validation engineer.** Tests silicon in the lab against its spec and automates measurements. *Tools: Scopes, spectrum analyzers, Python.*\n\n## Guides on the way\n- Core analog interviews\n- Analog & mixed-signal IC roles\n- RF & communication roles\n- Power electronics roles\n- GATE ECE"
         }
       ]
     },
@@ -267,139 +41,27 @@
       "name": "Digital",
       "color": "#F2B33D",
       "blurb": "RTL, verification, physical design and processors. Ones and zeros, all the way down to silicon.",
-      "primer": {
-        "draft": true,
-        "lead": "Digital design is about building enormous systems out of simple, reliable pieces. You describe behaviour at a high level, tools turn it into billions of transistors, and the hard part is making sure it is correct, fast enough and efficient.",
-        "philosophy": [
-          "Abstraction is everything. Engineers describe hardware in RTL (Verilog, SystemVerilog or VHDL), and synthesis and place-and-route tools turn that into gates and wires. Each layer hides the one below so that very large designs stay manageable.",
-          "Correctness comes first. A bug in silicon can cost months and millions to fix, so verification often takes more engineering effort than the design itself.",
-          "Every design balances power, performance and area (PPA), all governed by the clock. Meeting timing, so every signal arrives before the next clock edge, is a constant theme from architecture to sign-off."
-        ],
-        "work": [
-          {
-            "title": "Architecture",
-            "text": "Define what the chip or block does, its interfaces and its performance targets."
-          },
-          {
-            "title": "RTL design",
-            "text": "Write synthesizable hardware descriptions of the micro-architecture."
-          },
-          {
-            "title": "Verification",
-            "text": "Build testbenches, often in SystemVerilog and UVM, and drive coverage until you trust the design."
-          },
-          {
-            "title": "Synthesis and timing",
-            "text": "Map RTL to a standard-cell library and check timing with static timing analysis."
-          },
-          {
-            "title": "Physical design",
-            "text": "Floorplan, place, build the clock tree and route, then close timing and power."
-          },
-          {
-            "title": "Sign-off and silicon",
-            "text": "Pass physical and electrical checks, tape out, and validate the returned silicon."
-          }
-        ],
-        "roles": [
-          {
-            "name": "RTL / design engineer",
-            "does": "Writes and owns the RTL for blocks such as interfaces, pipelines and controllers.",
-            "tools": "SystemVerilog, simulators, lint tools"
-          },
-          {
-            "name": "Design verification (DV) engineer",
-            "does": "Builds testbenches and coverage models and finds bugs before tape-out. One of the largest hiring areas.",
-            "tools": "SystemVerilog, UVM, VCS or Xcelium"
-          },
-          {
-            "name": "Physical design engineer",
-            "does": "Takes the netlist to a routed layout that meets timing, power and area.",
-            "tools": "Innovus or ICC2, PrimeTime"
-          },
-          {
-            "name": "DFT engineer",
-            "does": "Adds test structures (scan chains, BIST) so manufactured chips can be tested.",
-            "tools": "Tessent or TetraMAX, ATPG"
-          },
-          {
-            "name": "FPGA engineer",
-            "does": "Implements designs on FPGAs for prototyping, defence, telecom and finance.",
-            "tools": "Vivado, Quartus"
-          },
-          {
-            "name": "Post-silicon validation engineer",
-            "does": "Tests real chips in the lab and debugs what simulation missed.",
-            "tools": "Lab setups, Python, debuggers"
-          }
-        ],
-        "next": "With the big picture in place, go to Career for interview prep and role guides, or General for playlists, tools and projects."
-      },
-      "career": [
+      "sections": [
         {
-          "id": "rtl-interviews",
-          "name": "RTL design interviews",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
+          "id": "philosophy",
+          "title": "Philosophy",
+          "summary": "How people in this field think, and what the work actually looks like.",
+          "draft": true,
+          "body": "Digital design is about building enormous systems out of simple, reliable pieces. You describe behaviour at a high level, tools turn it into billions of transistors, and the hard part is making sure it is correct, fast enough and efficient.\n\nAbstraction is everything. Engineers describe hardware in RTL (Verilog, SystemVerilog or VHDL), and synthesis and place-and-route tools turn that into gates and wires. Each layer hides the one below so that very large designs stay manageable.\n\nCorrectness comes first. A bug in silicon can cost months and millions to fix, so verification often takes more engineering effort than the design itself.\n\nEvery design balances power, performance and area (PPA), all governed by the clock. Meeting timing, so every signal arrives before the next clock edge, is a constant theme from architecture to sign-off.\n\n## What the work looks like\n1. **Architecture.** Define what the chip or block does, its interfaces and its performance targets.\n2. **RTL design.** Write synthesizable hardware descriptions of the micro-architecture.\n3. **Verification.** Build testbenches, often in SystemVerilog and UVM, and drive coverage until you trust the design.\n4. **Synthesis and timing.** Map RTL to a standard-cell library and check timing with static timing analysis.\n5. **Physical design.** Floorplan, place, build the clock tree and route, then close timing and power.\n6. **Sign-off and silicon.** Pass physical and electrical checks, tape out, and validate the returned silicon."
         },
         {
-          "id": "dv-roles",
-          "name": "Design verification roles",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
+          "id": "learning-route",
+          "title": "Learning route",
+          "summary": "What to learn, in what order, with the resources worth your time.",
+          "draft": true,
+          "body": "Work through these stages in order. Each one builds on the last.\n\n## 1. Foundations\n- Number systems, Boolean algebra, combinational and sequential logic, finite state machines.\n- Read: *Digital Design and Computer Architecture* (Harris & Harris).\n\n## 2. Hardware description languages\n- Verilog or SystemVerilog, synthesizable coding style, and writing testbenches.\n- Practise small problems daily on HDLBits.\n\n## 3. Computer architecture\n- Pipelining, hazards, caches and memory.\n- Read: *Computer Organization and Design* (Patterson & Hennessy).\n\n## 4. Tools\n- Simulate with Icarus Verilog or Verilator and read waveforms in GTKWave.\n- Put designs on a real FPGA with Vivado or Quartus.\n\n## 5. Pick a direction\n- **Design verification:** SystemVerilog, UVM, coverage.\n- **RTL design:** micro-architecture and bus protocols such as AXI and APB.\n- **Physical design:** static timing analysis, floorplanning and timing closure.\n\n## 6. One project you can explain completely\nA UART or SPI controller on an FPGA, or a small pipelined RISC-V core."
         },
         {
-          "id": "pd-roles",
-          "name": "Physical design roles",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "software-roles",
-          "name": "Software roles for ECE students",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "ms-abroad",
-          "name": "MS abroad in VLSI",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
-        }
-      ],
-      "general": [
-        {
-          "id": "digital-playlists",
-          "name": "Best digital playlists",
-          "term": "List",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "hdl-tools",
-          "name": "Vivado, ModelSim & open-source tools",
-          "term": "Tools",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "hdl-practice",
-          "name": "Where to practise Verilog",
-          "term": "List",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "fpga-projects",
-          "name": "FPGA projects to build",
-          "term": "Advice",
-          "status": "soon",
-          "sample": false
+          "id": "careers",
+          "title": "Careers",
+          "summary": "The roles you can hold once you are in, and what each one does day to day.",
+          "draft": true,
+          "body": "## Roles you can hold\n- **RTL / design engineer.** Writes and owns the RTL for blocks such as interfaces, pipelines and controllers. *Tools: SystemVerilog, simulators, lint tools.*\n- **Design verification (DV) engineer.** Builds testbenches and coverage models and finds bugs before tape-out. One of the largest hiring areas. *Tools: SystemVerilog, UVM, VCS or Xcelium.*\n- **Physical design engineer.** Takes the netlist to a routed layout that meets timing, power and area. *Tools: Innovus or ICC2, PrimeTime.*\n- **DFT engineer.** Adds test structures (scan chains, BIST) so manufactured chips can be tested. *Tools: Tessent or TetraMAX, ATPG.*\n- **FPGA engineer.** Implements designs on FPGAs for prototyping, defence, telecom and finance. *Tools: Vivado, Quartus.*\n- **Post-silicon validation engineer.** Tests real chips in the lab and debugs what simulation missed. *Tools: Lab setups, Python, debuggers.*\n\n## Guides on the way\n- RTL design interviews\n- Design verification roles\n- Physical design roles\n- Software roles for ECE students\n- MS abroad in VLSI"
         }
       ]
     },
@@ -409,132 +71,27 @@
       "name": "Embedded",
       "color": "#7EDB6A",
       "blurb": "Firmware, microcontrollers and real-time systems. Where hardware meets code and ships in products.",
-      "primer": {
-        "draft": true,
-        "lead": "Embedded engineering is writing software for hardware that has a job to do: a car's brake controller, a pacemaker, a drone, a smartwatch. It lives close to the metal, with limited memory, power and time.",
-        "philosophy": [
-          "Constraints define the work. You may have kilobytes of RAM, a battery that has to last a year, or a deadline measured in microseconds. Efficiency and predictability matter more than features.",
-          "Reliability beats cleverness. Embedded devices often can't be easily updated and failures can be dangerous, so simple, testable, well-understood code wins.",
-          "You work across the hardware-software line. You read datasheets and schematics as often as code, and debugging can mean a debugger, a logic analyser and an oscilloscope on the same problem."
-        ],
-        "work": [
-          {
-            "title": "Pick the hardware",
-            "text": "Choose a microcontroller or processor, peripherals and power budget for the product."
-          },
-          {
-            "title": "Bring up the board",
-            "text": "Get clocks, power and a debug connection (JTAG or SWD) working, then the first blinking LED."
-          },
-          {
-            "title": "Write drivers",
-            "text": "Talk to peripherals: GPIO, timers, UART, SPI, I2C, ADC, DMA and interrupts."
-          },
-          {
-            "title": "Build the application",
-            "text": "Structure the firmware, often on an RTOS such as FreeRTOS or Zephyr, with tasks and deadlines."
-          },
-          {
-            "title": "Test",
-            "text": "Unit tests, hardware-in-the-loop tests and long soak tests on real devices."
-          },
-          {
-            "title": "Ship and maintain",
-            "text": "Optimise power, add bootloaders and over-the-air updates, and meet safety or certification standards."
-          }
-        ],
-        "roles": [
-          {
-            "name": "Firmware engineer",
-            "does": "Writes low-level C/C++ for microcontrollers: drivers, peripherals, power management.",
-            "tools": "C, Keil or GCC, JTAG debuggers"
-          },
-          {
-            "name": "Embedded software engineer",
-            "does": "Builds the application layer on top of an RTOS: scheduling, communication, state machines.",
-            "tools": "FreeRTOS, Zephyr, C/C++"
-          },
-          {
-            "name": "Embedded Linux / BSP engineer",
-            "does": "Brings up Linux on custom boards: bootloaders, device trees, kernel drivers.",
-            "tools": "Yocto, U-Boot, kernel"
-          },
-          {
-            "name": "Automotive embedded engineer",
-            "does": "Develops ECU software under automotive standards and safety rules.",
-            "tools": "AUTOSAR, CAN, ISO 26262"
-          },
-          {
-            "name": "IoT engineer",
-            "does": "Connects devices: BLE, Wi-Fi, cellular, cloud protocols, low-power design.",
-            "tools": "ESP-IDF, nRF SDK, MQTT"
-          },
-          {
-            "name": "Embedded test / validation engineer",
-            "does": "Builds test rigs and automated hardware-in-the-loop tests.",
-            "tools": "Python, HIL rigs, lab instruments"
-          }
-        ],
-        "next": "With the big picture in place, go to Career for interview prep and role guides, or General for playlists, tools and projects."
-      },
-      "career": [
+      "sections": [
         {
-          "id": "firmware-interviews",
-          "name": "Firmware & embedded interviews",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
+          "id": "philosophy",
+          "title": "Philosophy",
+          "summary": "How people in this field think, and what the work actually looks like.",
+          "draft": true,
+          "body": "Embedded engineering is writing software for hardware that has a job to do: a car's brake controller, a pacemaker, a drone, a smartwatch. It lives close to the metal, with limited memory, power and time.\n\nConstraints define the work. You may have kilobytes of RAM, a battery that has to last a year, or a deadline measured in microseconds. Efficiency and predictability matter more than features.\n\nReliability beats cleverness. Embedded devices often can't be easily updated and failures can be dangerous, so simple, testable, well-understood code wins.\n\nYou work across the hardware-software line. You read datasheets and schematics as often as code, and debugging can mean a debugger, a logic analyser and an oscilloscope on the same problem.\n\n## What the work looks like\n1. **Pick the hardware.** Choose a microcontroller or processor, peripherals and power budget for the product.\n2. **Bring up the board.** Get clocks, power and a debug connection (JTAG or SWD) working, then the first blinking LED.\n3. **Write drivers.** Talk to peripherals: GPIO, timers, UART, SPI, I2C, ADC, DMA and interrupts.\n4. **Build the application.** Structure the firmware, often on an RTOS such as FreeRTOS or Zephyr, with tasks and deadlines.\n5. **Test.** Unit tests, hardware-in-the-loop tests and long soak tests on real devices.\n6. **Ship and maintain.** Optimise power, add bootloaders and over-the-air updates, and meet safety or certification standards."
         },
         {
-          "id": "automotive",
-          "name": "Automotive embedded roles",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
+          "id": "learning-route",
+          "title": "Learning route",
+          "summary": "What to learn, in what order, with the resources worth your time.",
+          "draft": true,
+          "body": "Work through these stages in order. Each one builds on the last.\n\n## 1. Foundations\n- C, properly: pointers, bit manipulation, memory layout, volatile.\n- Enough digital logic and circuits to read a schematic.\n\n## 2. Your first microcontroller\n- Start with an Arduino to get something working fast.\n- Move to an STM32 and go bare-metal: registers, GPIO, timers and interrupts.\n\n## 3. Talking to the world\n- UART, SPI, I2C and CAN.\n- Learn to read datasheets and reference manuals. This is most of the job.\n\n## 4. Structure and real time\n- State machines, then an RTOS such as FreeRTOS: tasks, queues and scheduling.\n\n## 5. Debugging\n- A JTAG or SWD debugger, a logic analyser and an oscilloscope. Learn all three.\n\n## 6. Pick a direction\n- **Firmware:** drivers and low-power design.\n- **Embedded Linux:** Yocto, device trees and kernel drivers.\n- **Automotive:** AUTOSAR, CAN and functional safety.\n- **IoT:** ESP32, BLE, Wi-Fi and MQTT.\n\n## 7. One project you can explain completely\nA wireless sensor node with low-power sleep, or a motor controller."
         },
         {
-          "id": "embedded-internships",
-          "name": "Finding embedded internships",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "embedded-resume",
-          "name": "Resume & projects that get shortlisted",
-          "term": "Guide",
-          "status": "soon",
-          "sample": false
-        }
-      ],
-      "general": [
-        {
-          "id": "embedded-playlists",
-          "name": "Best embedded playlists",
-          "term": "List",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "boards",
-          "name": "Arduino, STM32 & ESP32: where to start",
-          "term": "Tools",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "embedded-projects",
-          "name": "Projects that teach the most",
-          "term": "Advice",
-          "status": "soon",
-          "sample": false
-        },
-        {
-          "id": "clubs",
-          "name": "Clubs & competitions",
-          "term": "Advice",
-          "status": "soon",
-          "sample": false
+          "id": "careers",
+          "title": "Careers",
+          "summary": "The roles you can hold once you are in, and what each one does day to day.",
+          "draft": true,
+          "body": "## Roles you can hold\n- **Firmware engineer.** Writes low-level C/C++ for microcontrollers: drivers, peripherals, power management. *Tools: C, Keil or GCC, JTAG debuggers.*\n- **Embedded software engineer.** Builds the application layer on top of an RTOS: scheduling, communication, state machines. *Tools: FreeRTOS, Zephyr, C/C++.*\n- **Embedded Linux / BSP engineer.** Brings up Linux on custom boards: bootloaders, device trees, kernel drivers. *Tools: Yocto, U-Boot, kernel.*\n- **Automotive embedded engineer.** Develops ECU software under automotive standards and safety rules. *Tools: AUTOSAR, CAN, ISO 26262.*\n- **IoT engineer.** Connects devices: BLE, Wi-Fi, cellular, cloud protocols, low-power design. *Tools: ESP-IDF, nRF SDK, MQTT.*\n- **Embedded test / validation engineer.** Builds test rigs and automated hardware-in-the-loop tests. *Tools: Python, HIL rigs, lab instruments.*\n\n## Guides on the way\n- Firmware & embedded interviews\n- Automotive embedded roles\n- Finding embedded internships\n- Resume & projects that get shortlisted"
         }
       ]
     }
