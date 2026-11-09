@@ -12,7 +12,7 @@
       "color": "#3CC8E2",
       "blurb": "RF, Power, Comms and IC design. The continuous world, and the careers built on it.\n\n",
       "primer": {
-        "draft": true,
+        
         "lead": "Analog is the art of working with a continuous, imperfect world. Signals are voltages and currents that can take any value, every component is non-ideal, and every design is a negotiation between competing goals.",
         "philosophy": [
           "You will probably spend most of your time \"building intuition\". The term will get thrown around a lot, and for good reason. Your value comes from the fact that you can predict what the circuit will do before you analyze/build it. Otherwise, any run of the mill SPICE tool is worth more than you. \n\nFIRST LESSON: BUILD INTUITION. ",
