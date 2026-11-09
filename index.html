@@ -1,0 +1,1439 @@
+<title>The ET Project</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a fab / engineering-drawing language. Opens on a photoreal silicon die; the ET mark
+   dives through a transistor array into one MOSFET cross-section with callouts and leader lines;
+   tracks open as full panels; guide pages read like a technical document with hairline rules. */
+:root{
+  --bg:#0A0B10;
+  --bg-2:#0E1016;
+  --panel:#141720;
+  --line:#242938;
+  --fg:#ECEDF2;
+  --muted:#9299AB;
+  --dim:#5F6678;
+  --analog:#3CC8E2; --digital:#F2B33D; --embedded:#7EDB6A;
+  --c:#ECEDF2;
+  --display:'Archivo','Arial Narrow',system-ui,sans-serif;
+  --body:'Archivo',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+html.locked,html.locked body{overflow:hidden}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit}
+:focus-visible{outline:1px solid var(--c);outline-offset:3px}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{margin:0;font:500 11px/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--c)}
+.xp{font-stretch:125%}
+
+/* ---------- Device stage: die → array → transistor ---------- */
+.device{position:relative;height:100vh;height:100svh}
+.device.pinned{height:240vh}
+.sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(120% 90% at 50% 40%,#151821 0%,var(--bg) 70%)}
+.sticky::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(130% 100% at 50% 45%,transparent 55%,rgba(0,0,0,.55) 100%)}
+.gl-host,.leaders,.tags{position:absolute;inset:0}
+.gl-host{will-change:transform,filter,opacity;transform-origin:50% 50%}
+.gl-host canvas{display:block;width:100%;height:100%;touch-action:pan-y}
+.leaders{width:100%;height:100%;pointer-events:none;overflow:visible}
+.tags{pointer-events:none}
+.lead{fill:none;stroke:var(--muted);stroke-width:1;opacity:.6;transition:opacity .4s,stroke .4s}
+.ldot{fill:var(--fg);stroke:var(--bg);stroke-width:1.5;transition:opacity .4s,fill .4s}
+.lead-term{stroke:var(--fg);opacity:.75}
+.is-on .lead-term{stroke:var(--c);opacity:.95}
+.is-on .ldot-term{fill:var(--c)}
+.is-on .lead-anat,.is-on .ldot-anat,.is-on .tag-anat{opacity:0}
+.tag{position:absolute;left:0;top:0;will-change:transform;transition:opacity .4s}
+.tag-anat{font:400 12px/1.2 var(--mono);color:#C3C8D4;white-space:nowrap;letter-spacing:.02em;background:color-mix(in oklab,var(--bg) 72%,transparent);padding:3px 6px}
+.tag-term{pointer-events:auto;display:flex;align-items:center;gap:10px;padding:8px 12px 8px 8px;border:1px solid var(--line);background:color-mix(in oklab,var(--bg) 82%,transparent);border-radius:2px;cursor:pointer;text-align:left;transition:border-color .3s,background-color .3s,opacity .4s}
+.sym{flex:none;display:grid;place-items:center;width:26px;height:26px;border:1px solid var(--fg);font:500 13px/1 var(--mono);transition:border-color .3s,color .3s,background-color .3s}
+.tbody{display:grid;gap:2px}
+.tname{font:800 15px/1 var(--display);font-stretch:125%;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.tsub{font:400 10px/1.2 var(--mono);color:var(--muted);letter-spacing:.06em;white-space:nowrap;display:none}
+.is-on .tag-term{border-color:color-mix(in oklab,var(--c) 55%,transparent)}
+.is-on .tag-term .sym{border-color:var(--c);color:var(--c)}
+.is-on .tag-term .tname{color:var(--c)}
+.is-on .tag-term .tsub{display:block}
+.tag-term.is-hot,.tag-term:hover{background:color-mix(in oklab,var(--c) 14%,var(--bg))}
+.is-on .tag-term.is-hot .sym,.is-on .tag-term:hover .sym{background:var(--c);color:var(--bg)}
+@media (max-width:700px){ .wide-only{display:none} .tname{font-size:13px} .tag-term{padding:6px 9px 6px 6px;gap:8px} .sym{width:22px;height:22px;font-size:12px} }
+
+/* per-level visibility */
+.tags,.leaders,.console,.et,.level-ui,.et-hot,.caption{transition:opacity .45s}
+.stage:not([data-level="fet"]) .tags,.stage:not([data-level="fet"]) .leaders,.stage:not([data-level="fet"]) .console,.stage:not([data-level="fet"]) .et{opacity:0;pointer-events:none}
+.stage[data-level="fet"] .level-ui,.stage[data-level="transit"] .level-ui,.stage[data-level="fet"] .et-hot,.stage[data-level="transit"] .et-hot{opacity:0;pointer-events:none}
+.stage.is-zooming .tags,.stage.is-zooming .leaders,.stage.is-zooming .console,.stage.is-zooming .brand{opacity:0;pointer-events:none}
+.stage:not([data-level="transit"]) .caption{opacity:0}
+
+.brand{position:absolute;left:0;right:0;top:0;padding-top:calc(env(safe-area-inset-top,0px) + 18px);padding-bottom:48px;pointer-events:none;transition:opacity .35s;background:linear-gradient(to bottom,rgba(10,11,16,.88) 0%,rgba(10,11,16,.6) 60%,transparent)}
+.brand .wrap{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.et{margin:0 0 10px;font:900 clamp(64px,11vw,156px)/.8 var(--display);font-stretch:125%;letter-spacing:-.03em}
+.tagline{margin:0;font:500 clamp(11px,1.2vw,13px)/1.3 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.statement{margin:12px 0 0;max-width:30ch;font:700 clamp(15px,1.6vw,19px)/1.3 var(--display);font-stretch:112%;color:var(--fg);text-wrap:balance}
+.brand-r{display:grid;justify-items:end;gap:10px}
+.marking{margin:0;text-align:right;font:400 11px/1.7 var(--mono);color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+.zoom-out{pointer-events:auto}
+@media (max-width:700px){.marking{display:none}.brand .wrap{flex-direction:column;gap:8px}.brand-r{justify-items:start}}
+
+.console,.level-ui,.caption{position:absolute;left:0;right:0;bottom:0;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px);padding-top:40px;background:linear-gradient(to top,rgba(10,11,16,.85),transparent)}
+.console .wrap,.level-ui .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
+.readout,.cap{margin:0;font:500 13px/1.3 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.readout b{font-weight:500;color:var(--fg)}
+.readout .st{color:var(--fg)}
+.is-on .readout .st{color:var(--embedded)}
+.hint{margin:0;flex:1;min-width:200px;font:400 13px/1.4 var(--mono);color:var(--muted);text-align:center}
+.level-ui .hint{color:var(--fg)}
+/* scale rail: jump between wafer, die, array and MOSFET */
+.scale{position:relative;display:grid;margin-top:4px;pointer-events:auto}
+.scale::before{content:"";position:absolute;right:5px;top:14px;bottom:14px;width:1px;background:var(--line)}
+.scale button{display:grid;grid-template-columns:auto auto 11px;align-items:center;justify-content:end;gap:10px;background:none;border:0;padding:6px 0;cursor:pointer;color:var(--muted);font:500 12px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;text-align:right;transition:color .2s}
+.scale .s{color:var(--dim);font-size:11px;text-transform:none;letter-spacing:.02em}
+.scale i{position:relative;width:11px;height:11px;border:1px solid var(--muted);background:var(--bg);transition:background-color .2s,border-color .2s}
+.scale button:hover,.scale button:focus-visible{color:var(--fg)}
+.scale button.is-on{color:var(--fg)}
+.scale button.is-on i{background:var(--fg);border-color:var(--fg);box-shadow:0 0 0 3px color-mix(in oklab,var(--fg) 20%,transparent)}
+.scale button:disabled{cursor:default;opacity:.55}
+@media (max-width:700px){
+  .scale{display:flex;gap:16px;margin-top:2px}
+  .scale::before{display:none}
+  .scale button{grid-template-columns:11px auto;gap:7px}
+  .scale i{order:-1}
+  .scale .s{display:none}
+}
+.switch,.ghost{display:inline-flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:8px 14px 8px 8px;cursor:pointer;font:600 13px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.ghost{padding:10px 14px;font-weight:500;font-size:12px;color:var(--muted);background:color-mix(in oklab,var(--bg) 70%,transparent)}
+.ghost:hover,.switch:hover{border-color:var(--muted);color:var(--fg)}
+.switch .trk{position:relative;width:44px;height:22px;border:1px solid var(--muted);background:var(--bg)}
+.switch .knob{position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--muted);transition:transform .3s,background-color .3s}
+.switch[aria-pressed="true"] .trk{border-color:var(--embedded)}
+.switch[aria-pressed="true"] .knob{transform:translateX(22px);background:var(--embedded)}
+@media (max-width:700px){.hint{order:3;flex-basis:100%;text-align:left}}
+
+/* gate-voltage control */
+.readout{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px}
+.readout span{white-space:nowrap}
+.region{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 9px;border:1px solid var(--line);color:var(--muted);transition:color .3s,border-color .3s}
+.region[data-r="saturation"]{color:#F2B33D;border-color:color-mix(in oklab,#F2B33D 55%,transparent)}
+.region[data-r="triode"]{color:#7EDB6A;border-color:color-mix(in oklab,#7EDB6A 55%,transparent)}
+.vctl{flex:1 1 380px;max-width:560px;display:grid;gap:4px;margin-left:auto}
+.vctl label{font:500 11px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+#vgs-in{-webkit-appearance:none;appearance:none;width:100%;height:28px;margin:0;background:transparent;cursor:pointer}
+#vgs-in::-webkit-slider-runnable-track{height:6px;background:linear-gradient(to right,#4A5163 0 27.78%,#F2B33D 27.78% 83.33%,#7EDB6A 83.33% 100%)}
+#vgs-in::-moz-range-track{height:6px;background:linear-gradient(to right,#4A5163 0 27.78%,#F2B33D 27.78% 83.33%,#7EDB6A 83.33% 100%)}
+#vgs-in::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:26px;margin-top:-10px;background:var(--fg);border:2px solid var(--bg);border-radius:2px;box-shadow:0 0 0 1px var(--muted)}
+#vgs-in::-moz-range-thumb{width:14px;height:24px;background:var(--fg);border:2px solid var(--bg);border-radius:2px}
+#vgs-in:focus-visible{outline:1px solid var(--fg);outline-offset:4px}
+.vzones{display:grid;grid-template-columns:27.78% 55.55% 16.67%;font:400 10px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.vzones span{border-left:1px solid var(--line);padding-left:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.console .hint{order:3;flex-basis:100%;text-align:left}
+@media (max-width:700px){.vctl{flex-basis:100%;max-width:none;margin-left:0}}
+
+/* the clickable ET die on the wafer */
+.et-hot{position:absolute;left:0;top:0;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:none;border:0;cursor:pointer;padding:0}
+.et-hot::before,.et-hot::after{content:"";position:absolute;inset:18px;border:1.5px solid #F2B33D;border-radius:50%;opacity:.9}
+.et-hot::after{inset:4px;border-width:1px;opacity:0;animation:ping 2s cubic-bezier(.2,.6,.3,1) infinite}
+.et-hot:hover::before,.et-hot:focus-visible::before{inset:12px;border-width:2px}
+@keyframes ping{0%{transform:scale(.55);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+.et-hot span{position:absolute;left:50%;top:100%;transform:translateX(-50%);white-space:nowrap;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#F2B33D;background:color-mix(in oklab,var(--bg) 75%,transparent);padding:3px 6px}
+
+/* no WebGL: plain terminal row */
+.stage.no-gl .tags{position:absolute;inset:auto 0 42%;display:flex;justify-content:center;flex-wrap:wrap;gap:12px;padding:0 16px}
+.stage.no-gl .tag{position:static;transform:none!important}
+.stage.no-gl .tag-anat,.stage.no-gl .leaders{display:none}
+
+@media (prefers-reduced-motion:reduce){.et-hot::after{animation:none}}
+
+/* ---------- Index strip ---------- */
+.index{border-top:1px solid var(--line)}
+.index .wrap{display:grid;gap:32px;padding-block:72px}
+.index .intro{margin:0;max-width:62ch;font-size:clamp(18px,2vw,22px);line-height:1.5;color:var(--fg);text-wrap:pretty}
+.tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line)}
+.trk-btn{display:grid;gap:10px;align-content:start;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:24px 20px 28px 0;cursor:pointer;transition:background-color .2s}
+.trk-btn + .trk-btn{border-left:1px solid var(--line);padding-left:20px}
+.trk-btn .k{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.trk-btn .n{font:800 clamp(30px,4vw,48px)/1 var(--display);font-stretch:125%;letter-spacing:-.01em;transition:color .2s}
+.trk-btn .m{font:400 12px var(--mono);color:var(--muted)}
+.trk-btn:hover .n,.trk-btn:focus-visible .n{color:var(--c)}
+@media (max-width:760px){.tracks{grid-template-columns:minmax(0,1fr)}.trk-btn + .trk-btn{border-left:0;padding-left:0}}
+
+/* ---------- Track panel ---------- */
+.zoom{position:fixed;inset:0;z-index:40;overflow-y:auto;overscroll-behavior:contain;background-color:var(--bg);
+  background-image:
+    radial-gradient(90% 60% at 100% 0%,color-mix(in oklab,var(--c) 22%,transparent),transparent 65%),
+    linear-gradient(color-mix(in oklab,var(--c) 6%,transparent) 1px,transparent 1px),
+    linear-gradient(90deg,color-mix(in oklab,var(--c) 6%,transparent) 1px,transparent 1px);
+  background-size:auto,72px 72px,72px 72px;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.zoom-inner{display:grid;gap:16px;padding-block:22px 88px}
+.zoom-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.back{display:inline-flex;align-items:center;gap:8px;font:500 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:10px 14px;cursor:pointer;transition:color .2s,border-color .2s}
+.back:hover{color:var(--fg);border-color:var(--c)}
+.zoom-head{display:flex;align-items:flex-end;gap:clamp(14px,2vw,28px);margin-top:32px;flex-wrap:wrap}
+.big-sym{display:grid;place-items:center;width:clamp(58px,8vw,104px);aspect-ratio:1;max-width:100%;border:2px solid var(--c);color:var(--c);font:500 clamp(28px,4vw,52px)/1 var(--mono)}
+.zoom h2{margin:0;font:900 clamp(56px,12vw,168px)/.82 var(--display);font-stretch:125%;letter-spacing:-.035em;color:var(--fg)}
+.zoom-blurb{margin:8px 0 0;max-width:58ch;color:var(--muted);font-size:clamp(16px,1.8vw,19px)}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin-top:36px;border-top:1px solid var(--line)}
+.col{min-width:0;padding:22px 22px 8px 0}
+.col + .col{border-left:1px solid var(--line);padding-left:22px}
+.col-head{display:grid;gap:6px;padding-bottom:14px}
+.col-head h3{margin:0;display:flex;align-items:baseline;justify-content:space-between;gap:12px;font:800 22px/1.1 var(--display);font-stretch:125%;text-transform:uppercase;letter-spacing:.02em}
+.col-head h3 span{font:400 12px var(--mono);color:var(--muted);letter-spacing:.04em;text-transform:none}
+.col-head p{margin:0;font-size:14px;color:var(--muted)}
+.rows{list-style:none;margin:0;padding:0}
+.row{width:100%;display:grid;grid-template-columns:10px minmax(0,1fr);gap:4px 12px;align-items:baseline;padding:13px 6px 13px 0;background:none;border:0;border-top:1px solid var(--line);text-align:left;cursor:pointer;transition:background-color .2s,padding .25s}
+.row:hover,.row:focus-visible{background:color-mix(in oklab,var(--c) 10%,transparent);padding-left:8px}
+.row:focus-visible{outline-offset:-1px}
+.dot{width:8px;height:8px;border:1px solid var(--dim);transform:translateY(-1px)}
+.dot.on{background:var(--c);border-color:var(--c);box-shadow:0 0 8px var(--c)}
+.row-name{font:600 16px/1.3 var(--body);min-width:0}
+.row-term{grid-column:2;font:400 11px/1.2 var(--mono);color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.legend{margin:18px 0 0;display:flex;gap:18px;flex-wrap:wrap;font:400 11px var(--mono);color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+@media (max-width:900px){.cols{grid-template-columns:minmax(0,1fr)}.col + .col{border-left:0;padding-left:0;border-top:1px solid var(--line)}.col{padding-right:0}}
+
+/* primer call-to-action in a track panel */
+.primer-cta{width:100%;margin-top:30px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:20px;align-items:center;padding:22px 24px;border:1px solid color-mix(in oklab,var(--c) 55%,transparent);background:color-mix(in oklab,var(--c) 8%,var(--bg));cursor:pointer;text-align:left;transition:background-color .2s}
+.primer-cta:hover,.primer-cta:focus-visible{background:color-mix(in oklab,var(--c) 15%,var(--bg))}
+.primer-cta .pk{font:500 11px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--c);writing-mode:vertical-rl;transform:rotate(180deg)}
+.primer-cta .pt{display:block;margin:0 0 6px;font:800 clamp(22px,3vw,30px)/1.05 var(--display);font-stretch:125%;text-transform:uppercase;letter-spacing:.01em}
+.primer-cta .pd{display:block;color:var(--muted);max-width:60ch}
+.primer-cta .go{font:500 22px/1 var(--mono);color:var(--c);transition:transform .2s}
+.primer-cta:hover .go{transform:translateX(5px)}
+.then{margin:30px 0 0;font:500 11px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:640px){.primer-cta{grid-template-columns:minmax(0,1fr) auto}.primer-cta .pk{display:none}}
+
+/* primer page */
+.prose{display:grid;gap:16px;max-width:64ch}
+.prose p{margin:0;font-size:17px;line-height:1.65}
+.steps{list-style:none;margin:0;padding:0;counter-reset:st;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.steps li{counter-increment:st;background:var(--bg-2);padding:18px 18px 20px;display:grid;gap:8px;align-content:start}
+.steps li::before{content:counter(st,decimal-leading-zero);font:500 13px var(--mono);color:var(--c)}
+.steps h3{margin:0;font:700 18px/1.25 var(--body)}
+.steps p{margin:0;font-size:14px;color:var(--muted)}
+.roles{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.role{border:1px solid var(--line);border-top:2px solid var(--c);background:var(--panel);padding:18px 18px 16px;display:grid;gap:8px;align-content:start}
+.role h3{margin:0;font:700 18px/1.25 var(--body)}
+.role p{margin:0;font-size:15px}
+.role .tl{font:400 12px/1.4 var(--mono);color:var(--muted)}
+.next-row{display:flex;flex-wrap:wrap;gap:10px}
+
+/* ---------- Course page ---------- */
+.page{position:fixed;inset:0;z-index:50;overflow-y:auto;overscroll-behavior:contain;background:var(--bg-2);padding-bottom:env(safe-area-inset-bottom,0px)}
+.page-bar{position:sticky;top:0;z-index:3;background:color-mix(in oklab,var(--bg-2) 88%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.page-bar .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
+.bar-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 13px/1 var(--display);font-stretch:125%;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.page-grid{display:grid;grid-template-columns:200px minmax(0,1fr);gap:56px;padding-block:44px 96px}
+.toc{position:sticky;top:calc(72px + env(safe-area-inset-top,0px));align-self:start;display:grid;gap:2px}
+.toc button{display:flex;align-items:center;gap:10px;text-align:left;background:none;border:0;padding:8px 10px 8px 0;cursor:pointer;font:500 12px/1.2 var(--mono);color:var(--muted);white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;transition:color .2s}
+.toc button::before{content:"";flex:none;width:7px;height:7px;border:1px solid currentColor;transition:all .2s}
+.toc button:hover,.toc button.is-on{color:var(--fg)}
+.toc button.is-on::before{background:var(--c);border-color:var(--c);box-shadow:0 0 8px var(--c)}
+.doc{min-width:0;max-width:880px}
+.doc-head{display:grid;gap:16px;padding-bottom:32px;border-bottom:1px solid var(--line)}
+.doc-head h1{margin:0;font:900 clamp(40px,6.5vw,76px)/.92 var(--display);font-stretch:125%;letter-spacing:-.03em;text-wrap:balance}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:500 11px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;padding:6px 9px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.is-ready{color:var(--c);border-color:color-mix(in oklab,var(--c) 55%,transparent)}
+.sample-note{margin:0;max-width:62ch;font-size:14px;color:var(--digital);border:1px dashed color-mix(in oklab,var(--digital) 45%,transparent);padding:10px 14px}
+.sec{display:grid;gap:18px;padding-block:44px;border-bottom:1px solid var(--line);scroll-margin-top:80px}
+.sec-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.sec h2{margin:0;font:800 clamp(22px,3vw,30px)/1.1 var(--display);font-stretch:125%;text-transform:uppercase;letter-spacing:.01em}
+.count{font:400 12px var(--mono);color:var(--muted);letter-spacing:.04em}
+.lead{margin:0;max-width:64ch;font-size:clamp(17px,1.8vw,20px);line-height:1.6}
+.panel{background:var(--panel);border:1px solid var(--line);padding:18px 20px;display:grid;gap:6px;max-width:64ch}
+.panel p{margin:0}
+.units{list-style:none;margin:0;padding:0;counter-reset:u}
+.unit{counter-increment:u;display:grid;grid-template-columns:52px minmax(0,1fr);gap:14px;padding:18px 0;border-top:1px solid var(--line)}
+.unit:first-child{border-top:0;padding-top:4px}
+.unit::before{content:counter(u,decimal-leading-zero);font:500 14px/1.6 var(--mono);color:var(--c)}
+.unit h3{margin:0 0 10px;font:700 19px/1.3 var(--body)}
+.tags-list{display:flex;flex-wrap:wrap;gap:6px}
+.t{font-size:13px;line-height:1.2;padding:5px 10px;background:var(--panel);border:1px solid var(--line)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.card{background:var(--bg-2);padding:18px;display:grid;gap:8px;align-content:start;min-width:0}
+.card h3{margin:0;font:700 18px/1.25 var(--body)}
+.by{margin:0;font-size:14px;color:var(--muted)}
+.note{margin:0;font-size:14px}
+.link{justify-self:start;display:inline-flex;gap:6px;font:500 12px/1.2 var(--mono);color:var(--c);text-decoration:none;border-bottom:1px solid color-mix(in oklab,var(--c) 45%,transparent);padding-bottom:2px;margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+.link:hover{border-bottom-color:var(--c)}
+.nolink{font:400 11px/1.2 var(--mono);color:var(--dim);margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+.plist{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.pl{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.play{width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--c);color:var(--c)}
+.play svg{width:12px;height:12px;margin-left:2px;fill:currentColor}
+.pl-main{min-width:0;display:grid;gap:3px}
+.pl-title{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:700 17px/1.25 var(--body)}
+.pick{font:500 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--c);color:var(--bg);padding:4px 6px}
+@media (max-width:560px){.pl{grid-template-columns:40px minmax(0,1fr)}.pl>.link,.pl>.nolink{grid-column:2}}
+.table-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--panel)}
+tr:last-child td{border-bottom:0}
+td.yr{font-family:var(--mono);color:var(--c);font-variant-numeric:tabular-nums}
+.tips{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.tip{margin:0;background:var(--bg-2);padding:20px;display:grid;gap:14px;align-content:space-between}
+.tip p{margin:0;font-size:16px;line-height:1.55}
+.tip footer{font:400 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.empty{margin:0;font:400 13px var(--mono);color:var(--dim)}
+.soon-box{margin:0;max-width:62ch;color:var(--muted)}
+@media (max-width:860px){
+  .page-grid{grid-template-columns:minmax(0,1fr);gap:8px;padding-top:8px}
+  .toc{position:sticky;top:calc(57px + env(safe-area-inset-top,0px));z-index:2;display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;background:var(--bg-2);margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));padding:6px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line)}
+  .toc::-webkit-scrollbar{display:none}
+  .doc-head{padding-top:20px}
+}
+
+.foot{border-top:1px solid var(--line)}
+.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-block:32px;font:400 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.load-error{margin:24px;padding:16px;border:1px solid #FF6B7A;color:#FFB3BC;font-family:var(--mono)}
+@media (prefers-reduced-motion:reduce){.row,.lead,.ldot,.tag,.switch .knob{transition:none}}
+</style>
+
+<section class="device" id="device" aria-label="ET home: a silicon wafer you zoom into, down to one MOSFET whose terminals are the three tracks">
+  <div class="sticky stage" id="stage" data-level="wafer">
+    <div class="gl-host" id="gl-host"></div>
+    <svg class="leaders" id="leaders" aria-hidden="true"></svg>
+    <div class="tags" id="tags"></div>
+    <button class="et-hot" id="et-hot" type="button" aria-label="Dive deeper"><span>ET die</span></button>
+    <header class="brand">
+      <div class="wrap">
+        <div>
+          <h1 class="et">ET</h1>
+          <p class="tagline" id="tagline"></p>
+          <p class="statement" id="statement"></p>
+        </div>
+        <div class="brand-r">
+          <p class="marking" aria-hidden="true" id="marking"></p>
+          <nav class="scale" id="scale" aria-label="Zoom level">
+            <button type="button" data-lv="wafer"><span class="n">Wafer</span><span class="s">300 mm</span><i aria-hidden="true"></i></button>
+            <button type="button" data-lv="fet"><span class="n">MOSFET</span><span class="s">180 nm</span><i aria-hidden="true"></i></button>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <div class="level-ui">
+      <div class="wrap">
+        <p class="cap" id="lvl-cap"></p>
+        <p class="hint" id="lvl-hint"></p>
+      </div>
+    </div>
+    <div class="caption"><div class="wrap"><p class="cap" id="caption"></p></div></div>
+    <div class="console">
+      <div class="wrap">
+        <div class="readout" aria-live="polite">
+          <span>V<sub>GS</sub> <b id="vgs">0.00 V</b></span>
+          <span>V<sub>DS</sub> <b>1.00 V</b></span>
+          <span>I<sub>D</sub> <b id="idr">0.00 mA</b></span>
+          <span class="region" id="region" data-r="cut-off">Cut-off</span>
+        </div>
+        <div class="vctl">
+          <label for="vgs-in">Gate voltage, V<sub>GS</sub></label>
+          <input type="range" id="vgs-in" min="0" max="1.8" step="0.01" value="0">
+          <div class="vzones" aria-hidden="true"><span>Cut-off</span><span>Saturation</span><span>Triode</span></div>
+        </div>
+        <p class="hint" id="hint">Raise the gate voltage past 0.5 V to switch the transistor on.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="index" aria-labelledby="index-h">
+  <div class="wrap">
+    <p class="eyebrow" style="--c:var(--muted)" id="index-h">Three tracks</p>
+    <p class="intro" id="intro"></p>
+    <div class="tracks" id="tracks"></div>
+  </div>
+</section>
+
+<footer class="foot"><div class="wrap"><span>ET · The Electronics Engineering Project</span><span>Built for electronics students, by students</span></div></footer>
+
+<div class="zoom" id="zoom" hidden role="dialog" aria-modal="true" aria-labelledby="zoom-title">
+  <div class="wrap zoom-inner">
+    <div class="zoom-top">
+      <button class="back" id="zoom-back" type="button"><span aria-hidden="true">←</span> Back to the transistor</button>
+      <p class="eyebrow" id="zoom-eyebrow"></p>
+    </div>
+    <div class="zoom-head reveal">
+      <span class="big-sym" id="zoom-sym" aria-hidden="true"></span>
+      <h2 id="zoom-title"></h2>
+    </div>
+    <p class="zoom-blurb reveal" id="zoom-blurb"></p>
+    <div id="zoom-primer" class="reveal"></div>
+    <div class="cols" id="zoom-cols"></div>
+    <p class="legend reveal"><span><i class="dot on"></i>Ready</span><span><i class="dot"></i>Coming soon</span></p>
+  </div>
+</div>
+
+<div class="page" id="page" hidden role="dialog" aria-modal="true" aria-labelledby="doc-title">
+  <div class="page-bar"><div class="wrap">
+    <button class="back" id="page-back" type="button"></button>
+    <span class="bar-title" id="bar-title"></span>
+    <button class="back" id="page-home" type="button">Home</button>
+  </div></div>
+  <div class="wrap page-grid">
+    <nav class="toc" id="toc" aria-label="Sections"></nav>
+    <article class="doc" id="doc"></article>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(async function(){
+"use strict";
+// all site text lives in content.json (edited through Pages CMS)
+let C = null;
+try { const r = await fetch('content.json', { cache:'no-cache' }); if (r.ok) C = await r.json(); } catch (e) {}
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+// NMOS square-law model for the V_GS slider
+const VTH = 0.5, VDS = 1.0, KN = 1.0, VMAX = 1.8;
+function drainCurrent(v){ const ov = v - VTH; if (ov <= 0) return 0; return VDS < ov ? KN * (ov * VDS - VDS * VDS / 2) : 0.5 * KN * ov * ov; }
+const IDMAX = drainCurrent(VMAX);
+
+if (!C || !C.tracks) {
+  document.body.insertAdjacentHTML('afterbegin', '<p class="load-error">The content file (content.json) did not load. If you opened index.html straight from your computer, run it through a local server or open the GitHub Pages link instead.</p>');
+  return;
+}
+
+/* ---- GSAP stand-in: apply end states instantly if the library fails to load ---- */
+const SKIP = ['duration','ease','delay','stagger','onComplete','onUpdate'];
+function applyVars(t, v){
+  const list = typeof t === 'string' ? Array.from(document.querySelectorAll(t)) : (Array.isArray(t) ? t : [t]);
+  list.forEach(x => { for (const k in v) { if (SKIP.includes(k)) continue; if (x && x.style && !(k in x)) x.style[k] = v[k]; else if (x) x[k] = v[k]; } });
+  v.onUpdate && v.onUpdate();
+}
+const FAKE = {
+  to(t, v){ applyVars(t, v); v.onComplete && v.onComplete(); return FAKE; },
+  fromTo(t, a, b){ return FAKE.to(t, b); },
+  from(){ return FAKE; },
+  timeline(o){ o = o || {}; const tl = { to(t, v){ applyVars(t, v); return tl; }, call(f){ f(); return tl; } }; setTimeout(() => o.onComplete && o.onComplete(), 0); return tl; }
+};
+const G = window.gsap || FAKE;
+if (window.gsap) window.gsap.ticker.lagSmoothing(0);
+
+/* ---- data ---- */
+const CATS = [
+  ['career', 'Career', 'Interviews, roles, internships and what comes after'],
+  ['general', 'General', 'Playlists, tools, projects and advice']
+];
+const tracks = C.tracks.map(t => {
+  const list = [];
+  if (t.primer) list.push(Object.assign({ id:'primer', name:`${t.name} primer`, term:'Read this first', status:'ready' }, t.primer, { cat:'primer' }));
+  CATS.forEach(([cat]) => (t[cat] || []).forEach(x => list.push(Object.assign({}, x, { cat }))));
+  return Object.assign({}, t, { term: String(t.terminal || '').toLowerCase(), fullName: t.name + ' track', list });
+});
+const byId = Object.fromEntries(tracks.map(t => [t.id, t]));
+const byTerm = Object.fromEntries(tracks.map(t => [t.term, t]));
+
+$('#tagline').textContent = C.site.tagline || '';
+$('#statement').textContent = C.site.statement || '';
+$('#intro').textContent = C.site.intro || '';
+
+let pendingOrigin = null;
+$('#tracks').innerHTML = tracks.map(t => {
+  const n = c => (t[c] || []).length;
+  return `<button class="trk-btn" type="button" data-id="${esc(t.id)}" style="--c:${esc(t.color)}">
+    <span class="k">${esc(t.terminal)} terminal</span>
+    <span class="n">${esc(t.name)}</span>
+    <span class="m">${n('career')} career · ${n('general')} general</span></button>`;
+}).join('');
+$('#tracks').addEventListener('click', e => {
+  const b = e.target.closest('.trk-btn'); if (!b) return;
+  const r = b.getBoundingClientRect(); pendingOrigin = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  go(b.dataset.id);
+});
+
+/* ---- labels on the transistor ---- */
+const D = 3.6, ZF = D / 2 + 0.03;
+const LABELS = [
+  { term:'gate',   sym:'G', name:'Gate',   anchor:[0, 2.42, 0],     dx:0,    dy:-90 },
+  { term:'source', sym:'S', name:'Source', anchor:[-3.3, 2.42, 0],  dx:-150, dy:-34 },
+  { term:'drain',  sym:'D', name:'Drain',  anchor:[3.3, 2.42, 0],   dx:150,  dy:-34 },
+  { text:'Copper interconnect',      anchor:[3.95, 2.2, 1.72],   dx:120,  dy:-6,  wide:true },
+  { text:'Polysilicon gate',         anchor:[1.0, 0.5, ZF],      dx:240,  dy:20 },
+  { text:'Gate oxide · SiO₂',        anchor:[1.3, 0.035, ZF],    dx:220,  dy:60 },
+  { text:'n⁺ drain',                 anchor:[3.5, -0.45, ZF],    dx:120,  dy:70, wide:true },
+  { text:'Shallow trench isolation', anchor:[5.25, -0.6, ZF],    dx:70,   dy:40, wide:true },
+  { text:'Tungsten contact',         anchor:[-3.3, 1.3, 1.1],    dx:-120, dy:-10, wide:true },
+  { text:'Nitride spacer',           anchor:[-1.62, 0.3, ZF],    dx:-200, dy:30, wide:true },
+  { text:'n⁺ source',                anchor:[-3.5, -0.45, ZF],   dx:-120, dy:70 },
+  { text:'p-type substrate · Body',  anchor:[-2.4, -2.2, ZF],    dx:-150, dy:46 },
+  { text:'Channel',                  anchor:[0, -0.03, ZF],      dx:0,    dy:130 }
+];
+
+const ui = { on:false };
+const stageEl = $('#stage');
+const deviceEl = $('#device');
+
+function webglOK(){
+  try { const c = document.createElement('canvas'); return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl'))); }
+  catch (e) { return false; }
+}
+const wait = ms => new Promise(r => { if (RM || !window.gsap) setTimeout(r, 0); else window.gsap.delayedCall(ms / 1000, r); });
+const tw = (target, vars) => new Promise(r => G.to(target, Object.assign({}, vars, { onComplete: r })));
+
+const device = (function(){
+  const svg = $('#leaders'), tagsEl = $('#tags'), host = $('#gl-host');
+  const NS = 'http://www.w3.org/2000/svg';
+  let hoverTerm = null;
+  const terms = ['source', 'gate', 'drain'];
+
+  LABELS.forEach(L => {
+    let el;
+    if (L.term) {
+      const tr = byTerm[L.term];
+      el = document.createElement('button');
+      el.type = 'button'; el.className = 'tag tag-term';
+      el.style.setProperty('--c', tr ? tr.color : '#ECEDF2');
+      el.innerHTML = `<span class="sym">${L.sym}</span><span class="tbody"><span class="tname">${L.name}</span><span class="tsub">Career · General</span></span>`;
+      el.setAttribute('aria-label', `${L.name} terminal`);
+      el.addEventListener('click', () => terminalClick(L.term));
+      el.addEventListener('pointerenter', () => { hoverTerm = L.term; });
+      el.addEventListener('pointerleave', () => { if (hoverTerm === L.term) hoverTerm = null; });
+      el.addEventListener('focus', () => { hoverTerm = L.term; });
+      el.addEventListener('blur', () => { if (hoverTerm === L.term) hoverTerm = null; });
+    } else {
+      el = document.createElement('span');
+      el.className = 'tag tag-anat' + (L.wide ? ' wide-only' : '');
+      el.textContent = L.text;
+    }
+    tagsEl.appendChild(el); L.el = el;
+    const kind = L.term ? 'term' : 'anat';
+    const path = document.createElementNS(NS, 'path');
+    path.setAttribute('class', `lead lead-${kind}${L.wide ? ' wide-only' : ''}`);
+    const dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('r', L.term ? '3.5' : '2.6');
+    dot.setAttribute('class', `ldot ldot-${kind}${L.wide ? ' wide-only' : ''}`);
+    if (L.term && byTerm[L.term]) { path.style.setProperty('--c', byTerm[L.term].color); dot.style.setProperty('--c', byTerm[L.term].color); }
+    svg.appendChild(path); svg.appendChild(dot);
+    L.path = path; L.dot = dot;
+  });
+
+  const api = {
+    ok:false, level:'fet',
+    inView(){ if (api.level !== 'fet') return false; const r = deviceEl.getBoundingClientRect(); return r.top < innerHeight * 0.5 && r.bottom > innerHeight * 0.5; },
+    origin(term){ const L = LABELS.find(l => l.term === term); const r = L.el.getBoundingClientRect(); return { x:r.left + r.width / 2, y:r.top + r.height / 2 }; },
+    setVgs(){}, enter(){ return Promise.resolve(); }, exit(){}, toFet(){}, goLevel(){}
+  };
+
+  if (!window.THREE || !webglOK()) { stageEl.classList.add('no-gl'); stageEl.dataset.level = 'fet'; return api; }
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:'high-performance' }); }
+  catch (e) { stageEl.classList.add('no-gl'); stageEl.dataset.level = 'fet'; return api; }
+  api.ok = true; api.level = 'wafer';
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+  renderer.setClearColor(0x000000, 0);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.92;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  const canvas = renderer.domElement; canvas.setAttribute('aria-hidden', 'true');
+  host.appendChild(canvas);
+  const ANISO = renderer.capabilities.getMaxAnisotropy();
+
+  /* ---------- shared: studio environment + procedural textures ---------- */
+  function makeEnv(){
+    const s = new THREE.Scene();
+    s.add(new THREE.Mesh(new THREE.BoxGeometry(24, 14, 24), new THREE.MeshBasicMaterial({ color:0x0c0e13, side:THREE.BackSide })));
+    const panel = (w, h, x, y, z, rx, ry, c, i) => {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color:new THREE.Color(c).multiplyScalar(i), side:THREE.DoubleSide }));
+      m.position.set(x, y, z); m.rotation.set(rx, ry, 0); s.add(m);
+    };
+    panel(12, 4, 0, 6.9, 0, Math.PI / 2, 0, 0xffffff, 1.5);
+    panel(5, 7, -11.9, 1, 0, 0, Math.PI / 2, 0x9cc2ff, 0.65);
+    panel(5, 7, 11.9, 1, 3, 0, -Math.PI / 2, 0xffd2a6, 0.75);
+    panel(10, 2, 0, 2, -11.9, 0, 0, 0xffffff, 0.4);
+    panel(14, 1.2, 0, -1, 11.9, 0, Math.PI, 0x7f8aa8, 0.25);
+    const pm = new THREE.PMREMGenerator(renderer);
+    const tex = pm.fromScene(s, 0.035).texture; pm.dispose();
+    return tex;
+  }
+  const ENV = makeEnv();
+
+  function canvasTex(size, draw, color){
+    const c = document.createElement('canvas'); c.width = c.height = size;
+    draw(c.getContext('2d'), size);
+    const t = new THREE.CanvasTexture(c);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = ANISO;
+    if (color) t.encoding = THREE.sRGBEncoding;
+    t.userData = { canvas:c, draw };
+    return t;
+  }
+  function grain(x, s, base, amp){
+    const img = x.createImageData(s, s);
+    for (let i = 0; i < s * s; i++) { const n = clamp(base + (Math.random() - .5) * amp, 0, 255); img.data[i*4] = img.data[i*4+1] = img.data[i*4+2] = n; img.data[i*4+3] = 255; }
+    x.putImageData(img, 0, 0);
+  }
+  const fineGrain = canvasTex(256, (x, s) => grain(x, s, 140, 90));
+  const blotch = canvasTex(256, (x, s) => {
+    grain(x, s, 128, 30);
+    for (let i = 0; i < 420; i++) { const r = 2 + Math.random() * 9; x.fillStyle = `rgba(${Math.random() < .5 ? '255,255,255' : '0,0,0'},${.05 + Math.random() * .1})`; x.beginPath(); x.arc(Math.random() * s, Math.random() * s, r, 0, 7); x.fill(); }
+  });
+  const dot = canvasTex(64, (x, s) => { const g = x.createRadialGradient(s/2, s/2, 0, s/2, s/2, s/2); g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(.35, 'rgba(190,240,255,.65)'); g.addColorStop(1, 'rgba(120,200,255,0)'); x.fillStyle = g; x.fillRect(0, 0, s, s); });
+
+  function phys(o){
+    const m = new THREE.MeshPhysicalMaterial(Object.assign({ envMap:ENV, envMapIntensity:1 }, o));
+    return m;
+  }
+  const shapeFrom = pts => {
+    const s = new THREE.Shape();
+    pts.forEach((p, i) => { if (p.q) s.quadraticCurveTo(p.q[0], p.q[1], p.q[2], p.q[3]); else if (i === 0) s.moveTo(p[0], p[1]); else s.lineTo(p[0], p[1]); });
+    s.closePath(); return s;
+  };
+  const mirror = pts => pts.map(p => p.q ? { q:[-p.q[0], p.q[1], -p.q[2], p.q[3]] } : [-p[0], p[1]]);
+  const rrect = (x0, y0, x1, y1, r) => { r = Math.min(r, (x1 - x0) / 2, (y1 - y0) / 2); return shapeFrom([[x0 + r, y0], [x1 - r, y0], { q:[x1, y0, x1, y0 + r] }, [x1, y1 - r], { q:[x1, y1, x1 - r, y1] }, [x0 + r, y1], { q:[x0, y1, x0, y1 - r] }, [x0, y0 + r], { q:[x0, y0, x0 + r, y0] }]); };
+  function ext(shape, depth, mat, bevel){
+    const b = bevel == null ? 0.025 : bevel;
+    const g = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled:b > 0, bevelThickness:b, bevelSize:b, bevelSegments:3, curveSegments:24 });
+    g.translate(0, 0, -depth / 2);
+    const m = new THREE.Mesh(g, mat); m.castShadow = true; m.receiveShadow = true;
+    return m;
+  }
+  function keyLight(scene, pos, size){
+    scene.add(new THREE.HemisphereLight(0xbfd0ff, 0x1a1410, 0.16));
+    const k = new THREE.DirectionalLight(0xffffff, 1.2); k.position.copy(pos);
+    k.castShadow = true; k.shadow.mapSize.set(2048, 2048); k.shadow.bias = -0.0004; k.shadow.normalBias = 0.02;
+    const c = k.shadow.camera; c.left = -size; c.right = size; c.top = size; c.bottom = -size; c.near = 0.5; c.far = 80;
+    scene.add(k); scene.add(k.target);
+    return k;
+  }
+  const fitDist = (camera, visW, visH) => { const t = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)); return Math.max(visW / (2 * t * camera.aspect), visH / (2 * t)); };
+
+  /* ============== LEVEL 0 · the wafer ============== */
+  const WAF = (function(){
+    const scene = new THREE.Scene(); scene.environment = ENV;
+    const camera = new THREE.PerspectiveCamera(30, 1, 0.05, 300);
+    const look = new THREE.Vector3(), home = { pos:new THREE.Vector3(), look:new THREE.Vector3(0, 0, 0.4) };
+    const key = keyLight(scene, new THREE.Vector3(6, 16, 9), 11);
+    const R = 8, P = 0.92, EDGE = 0.3;
+    const ET = { i:2, j:4 };
+    const etGrp = new THREE.Vector3((ET.i + .5) * P, 0.19, (ET.j + .5) * P);
+
+    // one generic die, drawn once and stamped across the wafer
+    const DP = 256, dieC = document.createElement('canvas'); dieC.width = dieC.height = DP;
+    (function(x){
+      const r = (a, b, c, d, g) => { x.fillStyle = `rgb(${g},${g},${g})`; x.fillRect(a * DP, b * DP, c * DP, d * DP); };
+      r(0, 0, 1, 1, 128);
+      [[.07, .07], [.38, .07], [.07, .38], [.38, .38]].forEach(([a, b]) => { r(a, b, .28, .28, 152); for (let k = 0; k < 9; k++) r(a + .02, b + .02 + k * .028, .24, .012, 108); });
+      r(.7, .07, .23, .59, 172);
+      x.fillStyle = 'rgb(118,118,118)'; for (let yy = .07 * DP; yy < .66 * DP; yy += 3) x.fillRect(.7 * DP, yy, .23 * DP, 1);
+      r(.07, .7, .86, .1, 94); for (let k = 0; k < 14; k++) r(.08 + k * .06, .72, .03, .06, 166);
+      r(.07, .83, .4, .1, 140); r(.5, .83, .43, .1, 104);
+      for (let k = 0; k < 16; k++) { r(.015 + k * .061, .012, .03, .03, 205); r(.015 + k * .061, .958, .03, .03, 205); }
+    })(dieC.getContext('2d'));
+
+    let count = 0;
+    function drawWafer(x, s){
+      const k = s / (2 * R), C = s / 2;
+      x.globalCompositeOperation = 'source-over';
+      const g = x.createLinearGradient(s * .05, s * .15, s * .95, s * .85);
+      [['#ff5a3c', 0], ['#ff9f1c', .16], ['#ffe23a', .3], ['#a8ec62', .46], ['#3fd3c4', .6], ['#5a78ff', .74], ['#c45cff', .87], ['#ff5aa8', 1]].forEach(([c, o]) => g.addColorStop(o, c));
+      x.fillStyle = g; x.fillRect(0, 0, s, s);
+      x.globalCompositeOperation = 'soft-light';
+      const rg = x.createRadialGradient(C * .7, C * .6, 0, C, C, C);
+      rg.addColorStop(0, 'rgba(255,255,255,.5)'); rg.addColorStop(.6, 'rgba(128,128,128,0)'); rg.addColorStop(1, 'rgba(0,0,40,.6)');
+      x.fillStyle = rg; x.fillRect(0, 0, s, s);
+      x.globalCompositeOperation = 'overlay';
+      const n = Math.ceil(R / P) + 1, gap = .06 * P * k;
+      count = 0;
+      for (let i = -n; i < n; i++) for (let j = -n; j < n; j++) {
+        const x0 = i * P, z0 = j * P, x1 = x0 + P, z1 = z0 + P;
+        if (Math.hypot(Math.max(Math.abs(x0), Math.abs(x1)), Math.max(Math.abs(z0), Math.abs(z1))) > R - EDGE) continue;
+        count++;
+        x.drawImage(dieC, C + x0 * k + gap / 2, C + z0 * k + gap / 2, P * k - gap, P * k - gap);
+      }
+      x.globalCompositeOperation = 'source-over';
+      x.save(); x.beginPath(); x.arc(C, C, (R - EDGE) * k, 0, Math.PI * 2); x.clip();
+      x.strokeStyle = 'rgba(255,70,170,.55)'; x.lineWidth = gap * .6; x.beginPath();
+      for (let i = -n; i <= n; i++) { const p = C + i * P * k; x.moveTo(p, 0); x.lineTo(p, s); x.moveTo(0, p); x.lineTo(s, p); }
+      x.stroke(); x.restore();
+      x.save(); x.beginPath(); x.arc(C, C, R * k + 4, 0, Math.PI * 2); x.moveTo(C + (R - EDGE) * k, C); x.arc(C, C, (R - EDGE) * k, 0, Math.PI * 2, true); x.fillStyle = 'rgba(40,40,95,.55)'; x.fill(); x.restore();
+      // the ET die
+      const ex = C + ET.i * P * k + gap / 2, ey = C + ET.j * P * k + gap / 2, ew = P * k - gap;
+      x.fillStyle = 'rgba(10,12,22,.62)'; x.fillRect(ex + ew * .14, ey + ew * .42, ew * .72, ew * .16);
+      x.fillStyle = '#ffffff'; x.font = `900 ${ew * .095}px "Archivo","Arial Black",sans-serif`;
+      x.textAlign = 'center'; x.textBaseline = 'middle';
+      x.fillText('ET PROJECT', ex + ew / 2, ey + ew / 2 + ew * .006);
+      x.textAlign = 'start';
+    }
+    const SZ = renderer.capabilities.maxTextureSize >= 4096 && Math.max(screen.width, screen.height) > 1200 ? 4096 : 2048;
+    const wtex = canvasTex(SZ, drawWafer, true);
+    wtex.wrapS = wtex.wrapT = THREE.ClampToEdgeWrapping;
+    wtex.repeat.set(1 / (2 * R), 1 / (2 * R)); wtex.offset.set(.5, .5);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawWafer(wtex.userData.canvas.getContext('2d'), SZ); wtex.needsUpdate = true; });
+
+    const shape = new THREE.Shape();
+    const a0 = Math.PI / 2 + .035, a1 = Math.PI / 2 - .035 + Math.PI * 2;
+    shape.absarc(0, 0, R, a0, a1, false);
+    shape.lineTo(0, R - .16); shape.closePath();
+    const geo = new THREE.ExtrudeGeometry(shape, { depth:.16, bevelEnabled:true, bevelThickness:.03, bevelSize:.035, bevelSegments:3, curveSegments:160 });
+    const topMat = phys({ map:wtex, emissiveMap:wtex, emissive:new THREE.Color(0xffffff), emissiveIntensity:.3, metalness:.55, roughness:.26, clearcoat:1, clearcoatRoughness:.06, envMapIntensity:1.3 });
+    const edgeMat = phys({ color:0x2C3350, metalness:.85, roughness:.3 });
+    const wafer = new THREE.Mesh(geo, [topMat, edgeMat]);
+    wafer.rotation.x = -Math.PI / 2; wafer.castShadow = true;
+    const grp = new THREE.Group(); grp.add(wafer); grp.rotation.y = -0.42; scene.add(grp);
+    const shadow = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.ShadowMaterial({ opacity:.5 }));
+    shadow.rotation.x = -Math.PI / 2; shadow.position.y = -1.1; shadow.receiveShadow = true; scene.add(shadow);
+
+    const dir = new THREE.Vector3(0.12, 0.62, 0.78).normalize();
+    const mouse = { x:0, y:0 };
+    const L = { scene, camera, look, home, mouse, busy:false, wafer, dir, count, dieCanvas:dieC,
+      etWorld(){ grp.updateMatrixWorld(true); return grp.localToWorld(etGrp.clone()); },
+      isEt(p){ const l = grp.worldToLocal(p.clone()); return Math.abs(l.x - etGrp.x) < P * .65 && Math.abs(l.z - etGrp.z) < P * .65; },
+      layout(w, h){
+        camera.aspect = w / h; camera.updateProjectionMatrix();
+        const d = fitDist(camera, camera.aspect < 0.8 ? 17 : 21, 14.5);
+        home.pos.copy(home.look).addScaledVector(dir, d);
+        if (!L.busy) { camera.position.copy(home.pos); look.copy(home.look); }
+      },
+      update(t){
+        key.position.set(6 + mouse.x * 14, 16, 9 + mouse.y * 8);
+        if (!L.busy) {
+          const idle = RM ? 0 : 1;
+          const tx = mouse.y * 0.5 + idle * Math.sin(t * .31) * .04;
+          const ty = -0.42 + mouse.x * 0.55 + idle * Math.sin(t * .23) * .05;
+          const tz = -mouse.x * 0.32 + idle * Math.sin(t * .27 + 1) * .03;
+          const ly = mouse.y * -0.6 + idle * Math.sin(t * .5) * .08;
+          grp.rotation.x += (tx - grp.rotation.x) * .07;
+          grp.rotation.y += (ty - grp.rotation.y) * .07;
+          grp.rotation.z += (tz - grp.rotation.z) * .07;
+          grp.position.y += (ly - grp.position.y) * .07;
+          camera.position.x += (home.pos.x + mouse.x * 1.2 - camera.position.x) * .04;
+          camera.position.y += (home.pos.y - mouse.y * .8 - camera.position.y) * .04;
+          camera.position.z += (home.pos.z - camera.position.z) * .04;
+        }
+        camera.lookAt(look);
+      }
+    };
+    return L;
+  })();
+
+  /* ============== LEVEL 3 · one MOSFET, in cross-section ============== */
+  const FET = (function(){
+    const scene = new THREE.Scene(); scene.environment = ENV;
+    const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 300);
+    const look = new THREE.Vector3(), home = { pos:new THREE.Vector3(), look:new THREE.Vector3() };
+    keyLight(scene, new THREE.Vector3(4, 12, 9), 9);
+    const rim = new THREE.DirectionalLight(0x9fbaff, 0.5); rim.position.set(-8, 4, -6); scene.add(rim);
+    const pivot = new THREE.Group(); scene.add(pivot);
+    const dev = new THREE.Group(); dev.position.y = 0.15; pivot.add(dev);
+    const meshes = [], groups = { source:[], gate:[], drain:[], body:[] };
+    const T = (term, m, opts) => {
+      opts = opts || {};
+      if (term && byTerm[term]) { m.material.emissive = new THREE.Color(byTerm[term].color); m.material.emissiveIntensity = 0; }
+      m.userData = { term, base:m.material.opacity, baseY:m.position.y, transparent0:m.material.transparent };
+      dev.add(m); meshes.push(m); if (term) groups[term].push(m);
+      return m;
+    };
+    const tex = (t, rx) => { const c = t.clone(); c.needsUpdate = true; c.repeat.set(rx, rx); return c; };
+
+    const siMat   = phys({ color:0x3D4350, metalness:.25, roughness:.55, roughnessMap:tex(fineGrain, .35), bumpMap:tex(fineGrain, .35), bumpScale:.006, clearcoat:.25, clearcoatRoughness:.4 });
+    const nMat    = () => phys({ color:0x2A86A8, metalness:.2, roughness:.42, roughnessMap:tex(fineGrain, .5), clearcoat:.45, clearcoatRoughness:.3 });
+    const lddMat  = () => phys({ color:0x4FA3C0, metalness:.2, roughness:.42, clearcoat:.45 });
+    const oxMat   = () => phys({ color:0xBFE0F5, metalness:0, roughness:.06, transparent:true, opacity:.62, clearcoat:1, clearcoatRoughness:.05 });
+    const polyMat = () => phys({ color:0x8A3B28, metalness:.12, roughness:.68, roughnessMap:tex(blotch, .6), bumpMap:tex(blotch, .6), bumpScale:.01, clearcoat:.2 });
+    const nitMat  = () => phys({ color:0xCFD6C6, metalness:0, roughness:.3, transparent:true, opacity:.9, clearcoat:.6 });
+    const silMat  = () => phys({ color:0x6A6253, metalness:.85, roughness:.32, envMapIntensity:1.6 });
+    const wMat    = () => phys({ color:0xB4BAC4, metalness:1, roughness:.3, roughnessMap:tex(fineGrain, 1.5), envMapIntensity:2.4 });
+    const cuMat   = () => phys({ color:0xE08A55, metalness:1, roughness:.28, roughnessMap:tex(fineGrain, .8), envMapIntensity:2.6 });
+
+    // substrate (cut face is the cross-section)
+    T('body', ext(rrect(-5.6, -2.8, 5.6, 0, .04), D - .06, siMat, .03));
+    // shallow trench isolation
+    const sti = [[-5.6, .012], [-4.72, .012], [-4.92, -1.15], [-5.6, -1.15]];
+    T(null, ext(shapeFrom(sti), D + .04, oxMat(), .015));
+    T(null, ext(shapeFrom(mirror(sti)), D + .04, oxMat(), .015));
+    // n+ source / drain with curved diffusion profile, and LDD extensions
+    const npl = [[-4.75, .008], [-1.95, .008], { q:[-1.88, -.78, -2.7, -.84] }, [-4.86, -.86]];
+    T('source', ext(shapeFrom(npl), D + .03, nMat(), .015));
+    T('drain', ext(shapeFrom(mirror(npl)), D + .03, nMat(), .015));
+    const ldd = [[-2.15, .01], [-1.44, .01], { q:[-1.38, -.22, -1.78, -.27] }, [-2.15, -.27]];
+    T('source', ext(shapeFrom(ldd), D + .045, lddMat(), .01));
+    T('drain', ext(shapeFrom(mirror(ldd)), D + .045, lddMat(), .01));
+    // inversion channel (glows when on)
+    const chMat = phys({ color:0x16C4FF, emissive:new THREE.Color(0x00A6FF), emissiveIntensity:0, transparent:true, opacity:0, roughness:.2, depthWrite:false });
+    const NSEG = 36, segW = 2.92 / NSEG;
+    const channel = new THREE.Group(); dev.add(channel);
+    const segs = [];
+    for (let i = 0; i < NSEG; i++) {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(segW * 1.03, 0.1, D + .2), chMat);
+      m.position.set(-1.46 + segW * (i + .5), -0.05, 0); m.scale.y = 0.001; m.visible = false; m.renderOrder = 3;
+      channel.add(m); segs.push(m);
+    }
+    // gate stack
+    T('gate', ext(rrect(-1.5, 0, 1.5, .075, .01), D, oxMat(), .008));
+    T('gate', ext(rrect(-1.36, .075, 1.36, .86, .05), D, polyMat(), .025));
+    const spacer = [[-1.36, .86], { q:[-1.46, .1, -1.96, .075] }, [-1.36, .075]];
+    T('gate', ext(shapeFrom(spacer), D, nitMat(), .012));
+    T('gate', ext(shapeFrom(mirror(spacer)), D, nitMat(), .012));
+    // silicide caps
+    T('gate', ext(rrect(-1.34, .86, 1.34, .94, .02), D, silMat(), .01));
+    T('source', ext(rrect(-4.66, .008, -2.02, .07, .01), D * .98, silMat(), .008));
+    T('drain', ext(rrect(2.02, .008, 4.66, .07, .01), D * .98, silMat(), .008));
+    // tungsten contact plugs (two per diffusion, one on the gate)
+    const plug = (x, y0, y1, z, term) => {
+      const m = new THREE.Mesh(new THREE.CylinderGeometry(.3, .24, y1 - y0, 40, 1), wMat());
+      m.position.set(x, (y0 + y1) / 2, z); m.castShadow = m.receiveShadow = true; T(term, m);
+    };
+    plug(-3.3, .07, 1.95, .85, 'source'); plug(-3.3, .07, 1.95, -.85, 'source');
+    plug(3.3, .07, 1.95, .85, 'drain');   plug(3.3, .07, 1.95, -.85, 'drain');
+    plug(0, .94, 1.95, 0, 'gate');
+    // copper M1 straps
+    const m1 = x => ext(rrect(x - .72, 1.95, x + .72, 2.4, .06), D * .95, cuMat(), .03);
+    const pads = { source:T('source', m1(-3.3)), gate:T('gate', m1(0)), drain:T('drain', m1(3.3)) };
+    // glass interlayer dielectric over the back half (front half cut away)
+    const ild = new THREE.Mesh(new THREE.BoxGeometry(11.2, 2.45, D / 2), phys({ color:0xD9ECFF, metalness:0, roughness:.04, transparent:true, opacity:.13, clearcoat:1, clearcoatRoughness:.02, depthWrite:false }));
+    ild.position.set(0, 1.225, -D / 4 - 0.02); ild.renderOrder = 2;
+    T(null, ild);
+    // soft contact shadow
+    const sh = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.ShadowMaterial({ opacity:.42 }));
+    sh.rotation.x = -Math.PI / 2; sh.position.y = -2.86; sh.receiveShadow = true; dev.add(sh);
+    // electrons
+    const EN = 90, epos = new Float32Array(EN * 3), espd = new Float32Array(EN);
+    for (let i = 0; i < EN; i++) { epos[i*3] = -2 + Math.random() * 4; epos[i*3+1] = -.03 + (Math.random() - .5) * .05; epos[i*3+2] = (Math.random() - .5) * D * .92; espd[i] = .012 + Math.random() * .02; }
+    const eg = new THREE.BufferGeometry(); eg.setAttribute('position', new THREE.BufferAttribute(epos, 3));
+    const emat = new THREE.PointsMaterial({ map:dot, color:0xD8F8FF, size:.24, transparent:true, opacity:0, depthWrite:false, blending:THREE.AdditiveBlending });
+    const electrons = new THREE.Points(eg, emat); electrons.renderOrder = 3; dev.add(electrons);
+
+    const fx = { v:0, vt:0, dim:1 };
+    const glow = { source:0, gate:0, drain:0 };
+    const L = { scene, camera, look, home, pivot, dev, meshes, groups, pads, channel, fx, glow, busy:false,
+      dragYaw:0, dragPitch:0, hoverDev:false, intro:0,
+      layout(w, h){
+        camera.aspect = w / h; camera.updateProjectionMatrix();
+        const frac = camera.aspect < 0.8 ? 0.84 : (camera.aspect < 1.2 ? 0.68 : 0.5);
+        const d = fitDist(camera, 11.6 / frac, 10);
+        home.pos.set(0, d * 0.16, d); home.look.set(0, camera.aspect < 0.8 ? 1.0 : 1.2, 0);
+        if (!L.busy) { camera.position.copy(home.pos); look.copy(home.look); }
+      },
+      update(t, prog){
+        if (!L.busy) {
+          const e = ease(prog);
+          const ty = lerp(-0.8, 0, e) + L.dragYaw + (RM ? 0 : Math.sin(t * 0.35) * 0.035);
+          const tp = lerp(0.48, 0.15, e) + L.dragPitch;
+          pivot.rotation.y += (ty - pivot.rotation.y) * 0.08;
+          pivot.rotation.x += (tp - pivot.rotation.x) * 0.08;
+        }
+        terms.forEach(term => {
+          const target = L.busy ? glow[term] : (ui.on ? (hoverTerm === term ? 0.55 : 0.12) : (L.hoverDev ? 0.04 : 0));
+          glow[term] += (target - glow[term]) * 0.12;
+          groups[term].forEach(m => { m.material.emissiveIntensity = glow[term]; });
+        });
+        fx.v += (fx.vt - fx.v) * (RM ? 1 : 0.14);
+        const ov = Math.max(0, fx.v - VTH), idn = clamp(drainCurrent(fx.v) / IDMAX, 0, 1);
+        const P = clamp(ov / 0.35, 0, 1);
+        // inversion layer: thick at the source, thinning toward the drain; pinches off in saturation
+        segs.forEach((m, i) => {
+          const th = clamp((ov - VDS * ((i + .5) / NSEG)) / 0.7, 0, 1);
+          m.visible = th > 0.003 && P > 0.01;
+          m.scale.y = Math.max(0.001, 0.6 + th * 3.0);
+          m.position.y = -0.05 * m.scale.y;
+        });
+        chMat.opacity = 0.95 * P * fx.dim; chMat.emissiveIntensity = 1.6 + 1.6 * P;
+        emat.opacity = P * fx.dim;
+        const n = Math.round(idn * EN);
+        eg.setDrawRange(0, n);
+        if (n > 0 && !RM) {
+          const sp = 0.5 + 1.5 * idn;
+          for (let i = 0; i < n; i++) { epos[i*3] += espd[i] * sp; if (epos[i*3] > 2) epos[i*3] = -2; }
+          eg.attributes.position.needsUpdate = true;
+        }
+        camera.lookAt(look);
+      }
+    };
+    return L;
+  })();
+
+  /* ---------- render loop ---------- */
+  const LEVELS = { wafer:WAF, fet:FET };
+  let current = 'wafer', visible = true, raf = 0, held = false;
+  const clock = new THREE.Clock(), v = new THREE.Vector3();
+  function layoutAll(){
+    const w = stageEl.clientWidth, h = stageEl.clientHeight;
+    renderer.setSize(w, h, false);
+    Object.values(LEVELS).forEach(l => l.layout(w, h));
+    kick();
+  }
+  function progress(){
+    const r = deviceEl.getBoundingClientRect();
+    const span = r.height - innerHeight;
+    return span > 0 ? clamp(-r.top / span, 0, 1) : 0;
+  }
+  function placeTags(){
+    const w = stageEl.clientWidth, h = stageEl.clientHeight;
+    const s = clamp(w / 1300, 0.55, 1), narrow = w < 700;
+    const live = LABELS.filter(L => L.el.offsetParent !== null || L.term);
+    live.forEach(L => { L.w = L.el.offsetWidth; L.h = L.el.offsetHeight; });
+    live.forEach(L => {
+      v.set(L.anchor[0], L.anchor[1], L.anchor[2]).applyMatrix4(FET.dev.matrixWorld).project(FET.camera);
+      L.ax = (v.x + 1) / 2 * w; L.ay = (1 - v.y) / 2 * h;
+      const k = narrow && L.term && L.dx ? 0.35 : 1;
+      const lx = L.ax + L.dx * s * k, ly = L.ay + (narrow && L.term && L.dx ? -70 : L.dy * s);
+      L.sign = Math.sign(L.dx);
+      if (L.sign < 0) { L.left = lx - L.w - 6; L.top = ly - L.h / 2; }
+      else if (L.sign > 0) { L.left = lx + 6; L.top = ly - L.h / 2; }
+      else { L.left = lx - L.w / 2; L.top = L.dy < 0 ? ly - L.h - 4 : ly + 4; }
+      L.left = clamp(L.left, 8, Math.max(8, w - L.w - 8));
+    });
+    // keep side labels from overlapping each other
+    [-1, 1].forEach(sg => {
+      const col = live.filter(L => !L.term && L.sign === sg).sort((a, b) => a.top - b.top);
+      for (let i = 1; i < col.length; i++) { const p = col[i - 1]; if (col[i].top < p.top + p.h + 4) col[i].top = p.top + p.h + 4; }
+    });
+    live.forEach(L => {
+      const ey = L.sign ? L.top + L.h / 2 : (L.dy < 0 ? L.top + L.h + 4 : L.top - 4);
+      const ex = L.sign < 0 ? L.left + L.w + 6 : L.sign > 0 ? L.left - 6 : clamp(L.ax, L.left, L.left + L.w);
+      const kx = L.sign ? ex - L.sign * 18 * s : ex;
+      L.path.setAttribute('d', `M${L.ax.toFixed(1)},${L.ay.toFixed(1)} L${kx.toFixed(1)},${ey.toFixed(1)} L${ex.toFixed(1)},${ey.toFixed(1)}`);
+      L.dot.setAttribute('cx', L.ax.toFixed(1)); L.dot.setAttribute('cy', L.ay.toFixed(1));
+      L.el.style.transform = `translate(${L.left.toFixed(1)}px, ${L.top.toFixed(1)}px)`;
+      if (L.term) L.el.classList.toggle('is-hot', hoverTerm === L.term && ui.on);
+    });
+  }
+  const hot = $('#et-hot'), hotLabel = hot.querySelector('span');
+  const HOTS = {
+    wafer: { label:'ET die',          world: () => WAF.etWorld(),  cam: () => WAF.camera },
+
+  };
+  function placeHot(){
+    const H = HOTS[current]; if (!H) return;
+    v.copy(H.world()).project(H.cam());
+    const w = stageEl.clientWidth, h = stageEl.clientHeight;
+    hot.style.transform = `translate(${((v.x + 1) / 2 * w).toFixed(1)}px, ${((1 - v.y) / 2 * h).toFixed(1)}px)`;
+  }
+  function frame(){
+    raf = 0;
+    const t = clock.getElapsedTime();
+    const lv = LEVELS[current];
+    lv.update(t, current === 'fet' ? progress() : 0);
+    renderer.render(lv.scene, lv.camera);
+    if (current === 'fet') placeTags(); else placeHot();
+    if ((visible || api.diving) && !held) raf = requestAnimationFrame(frame);
+  }
+  function kick(){ if (!raf) raf = requestAnimationFrame(frame); }
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(deviceEl);
+  window.addEventListener('scroll', kick, { passive:true });
+
+  /* ---------- pointer ---------- */
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  let dragging = false, moved = 0, lastX = 0, lastY = 0;
+  function setNdc(e){ const r = canvas.getBoundingClientRect(); ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); return r; }
+  function pickFet(e){
+    setNdc(e); ray.setFromCamera(ndc, FET.camera);
+    const hit = ray.intersectObjects(FET.meshes, false).find(h => h.object.material.opacity > .3 || h.object.userData.term);
+    return hit ? hit.object : null;
+  }
+  // is the pointer on the thing that leads one level deeper?
+  function pickDeeper(e){
+    setNdc(e);
+    if (current === 'wafer') { ray.setFromCamera(ndc, WAF.camera); const h = ray.intersectObject(WAF.wafer, false)[0]; return !!h && WAF.isEt(h.point); }
+    return false;
+  }
+  const MOUSE = { wafer:WAF.mouse };
+  canvas.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch' || current !== 'fet' || FET.busy) return;
+    dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY;
+    canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', e => {
+    const r = canvas.getBoundingClientRect();
+    const mx = (e.clientX - r.left) / r.width - .5, my = (e.clientY - r.top) / r.height - .5;
+    if (MOUSE[current]) {
+      MOUSE[current].x = mx; MOUSE[current].y = my;
+      if (e.pointerType === 'mouse') canvas.style.cursor = pickDeeper(e) ? 'pointer' : '';
+      kick(); return;
+    }
+    if (current !== 'fet' || FET.busy) return;
+    if (dragging) {
+      const dx = e.clientX - lastX, dy = e.clientY - lastY;
+      moved += Math.abs(dx) + Math.abs(dy); lastX = e.clientX; lastY = e.clientY;
+      FET.dragYaw = clamp(FET.dragYaw + dx * 0.006, -1.3, 1.3);
+      FET.dragPitch = clamp(FET.dragPitch + dy * 0.004, -0.45, 0.6);
+      kick(); return;
+    }
+    if (e.pointerType !== 'mouse') return;
+    const m = pickFet(e);
+    FET.hoverDev = !!m;
+    const term = m && m.userData.term && m.userData.term !== 'body' ? m.userData.term : null;
+    hoverTerm = ui.on ? term : null;
+    canvas.style.cursor = m && (!ui.on || term) ? 'pointer' : (m ? 'grab' : '');
+    kick();
+  });
+  canvas.addEventListener('pointerup', e => { dragging = false; try { canvas.releasePointerCapture(e.pointerId); } catch (_) {} });
+  canvas.addEventListener('pointerleave', () => {
+    FET.hoverDev = false; if (!dragging) hoverTerm = null;
+    Object.values(MOUSE).forEach(m => { m.x = m.y = 0; });
+    canvas.style.cursor = '';
+  });
+  canvas.addEventListener('click', e => {
+    if (current !== 'fet') { if (!api.diving && pickDeeper(e)) api.toFet(true); return; }
+    if (FET.busy || moved > 6) { moved = 0; return; }
+    const m = pickFet(e); if (!m) return;
+    if (!ui.on) { rampVgs(1.0); return; }
+    const term = m.userData.term;
+    if (term && term !== 'body') terminalClick(term);
+  });
+
+  /* ---------- moving between levels ---------- */
+  const fadeOut = (scale, d) => new Promise(r => G.to(host, { scale, opacity:0, filter:'blur(12px)', duration:d, ease:'power2.in', onComplete:r }));
+  const fadeIn = (from, d) => new Promise(r => G.fromTo(host, { scale:from, opacity:0, filter:'blur(12px)' }, { scale:1, opacity:1, filter:'blur(0px)', duration:d, ease:'power2.out', onComplete:r }));
+  const settle = () => { host.style.opacity = '1'; host.style.filter = 'none'; host.style.transform = 'none'; };
+  const ORDER = ['wafer', 'fet'];
+  const MARKS = {
+    wafer: `Silicon wafer · 300 mm<br>${WAF.count} dies · one marked ET`,
+    die: 'One die · 10.0 × 10.0 mm<br>SRAM · cores · logic · analog · I/O',
+    array: 'Transistor array<br>diffusion · poly gates · contacts · Cu',
+    fet: 'NMOS · enhancement<br>L = 180 nm · t<sub>ox</sub> = 4 nm<br>V<sub>th</sub> = 0.5 V · V<sub>DS</sub> = 1.0 V'
+  };
+  const UI = {
+    wafer: ['Move the cursor to tilt the wafer', 'One die is stamped ET. Click it to zoom straight into its transistor.'],
+    die:   ['One die · 10 × 10 mm', 'The ET mark sits in the analog block. Click it to keep diving.'],
+    array: ['Transistor array', 'One gate is glowing. Click it to open the transistor.']
+  };
+  const rail = $('#scale');
+  function updateRail(){
+    rail.querySelectorAll('button').forEach(b => {
+      const on = b.dataset.lv === current;
+      b.classList.toggle('is-on', on);
+      if (on) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      b.disabled = api.diving;
+    });
+  }
+  function show(level){
+    current = level; api.level = level;
+    deviceEl.classList.toggle('pinned', level === 'fet');
+    $('#marking').innerHTML = MARKS[level];
+    if (UI[level]) { $('#lvl-cap').textContent = UI[level][0]; $('#lvl-hint').textContent = UI[level][1]; hotLabel.textContent = HOTS[level].label; }
+    updateRail(); kick();
+  }
+  function rest(level){
+    stageEl.dataset.level = level;
+    api.diving = false; updateRail(); kick();
+  }
+  const cap = t => { $('#caption').textContent = t; };
+  api.diving = false;
+  show('wafer');
+
+  // jump straight to any level from the scale rail
+  api.goLevel = async function(target, animate){
+    if (api.diving || target === current) return;
+    api.diving = true; updateRail(); kick();
+    const deeper = ORDER.indexOf(target) > ORDER.indexOf(current);
+    const anim = animate !== false && !RM;
+    stageEl.dataset.level = 'transit';
+    cap({ wafer:'Silicon wafer', die:'One die', array:'Transistor array', fet:'One MOSFET, in cross-section' }[target]);
+    if (anim) await fadeOut(deeper ? 1.8 : 0.6, 0.3);
+    if (target !== 'fet') window.scrollTo({ top:0 });
+    show(target);
+    const L = LEVELS[target];
+    L.busy = true;
+    L.camera.position.copy(L.home.pos).sub(L.home.look).multiplyScalar(deeper ? 1.5 : 0.5).add(L.home.look);
+    L.look.copy(L.home.look);
+    if (anim) {
+      fadeIn(deeper ? 0.8 : 1.5, 0.45);
+      if (target === 'fet') { FET.pivot.rotation.set(0.7, -1.1, 0); G.to(FET.pivot.rotation, { x:0.48, y:-0.8, duration:1, ease:'power3.out' }); }
+      await tw(L.camera.position, { x:L.home.pos.x, y:L.home.pos.y, z:L.home.pos.z, duration:0.95, ease:'power3.out' });
+    } else { L.camera.position.copy(L.home.pos); settle(); }
+    L.busy = false;
+    rest(target);
+  };
+
+  // the continuous dive: from wherever you are down to the transistor
+  api.toFet = async function(animate){
+    if (api.diving || current === 'fet') return;
+    if (animate === false || RM) return api.goLevel('fet', false);
+    api.diving = true; updateRail(); kick();
+    stageEl.dataset.level = 'transit';
+    const push = async (L, P, dy, dz) => {
+      L.busy = true;
+      G.to(L.camera.position, { x:P.x, y:P.y + dy, z:P.z + dz, duration:1.1, ease:'power3.in' });
+      G.to(L.look, { x:P.x, y:P.y, z:P.z, duration:1.1, ease:'power3.in' });
+      await wait(800); await fadeOut(2.2, 0.3);
+    };
+    const arrive = async (L, d) => {
+      L.busy = true;
+      L.camera.position.copy(L.home.pos).sub(L.home.look).multiplyScalar(1.7).add(L.home.look); L.look.copy(L.home.look);
+      fadeIn(0.8, 0.45);
+      await tw(L.camera.position, { x:L.home.pos.x, y:L.home.pos.y, z:L.home.pos.z, duration:d, ease:'power2.out' });
+    };
+    cap('Silicon wafer · diving into the ET die');
+    await push(WAF, WAF.etWorld(), 0.8, 0.55);
+    show('fet'); cap('One MOSFET, in cross-section');
+    FET.busy = true;
+    FET.camera.position.copy(FET.home.pos).multiplyScalar(0.32); FET.look.copy(FET.home.look);
+    FET.pivot.rotation.set(0.9, -1.3, 0);
+    fadeIn(0.85, 0.55);
+    G.to(FET.pivot.rotation, { x:0.48, y:-0.8, duration:1.2, ease:'power3.out' });
+    await tw(FET.camera.position, { x:FET.home.pos.x, y:FET.home.pos.y, z:FET.home.pos.z, duration:1.2, ease:'power3.out' });
+    [WAF].forEach(L => { L.busy = false; L.camera.position.copy(L.home.pos); L.look.copy(L.home.look); });
+    FET.busy = false;
+    rest('fet');
+  };
+  hot.addEventListener('click', () => api.toFet(true));
+  rail.addEventListener('click', e => { const b = e.target.closest('button'); if (b && !b.disabled) api.goLevel(b.dataset.lv, true); });
+  document.addEventListener('keydown', e => {
+    if (e.target.closest && e.target.closest('input,textarea,select')) return;
+    if (!zoom.hidden || !page.hidden || api.diving) return;
+    const i = ORDER.indexOf(current);
+    if (e.key === ']' && i < ORDER.length - 1) api.goLevel(ORDER[i + 1], true);
+    if (e.key === '[' && i > 0) api.goLevel(ORDER[i - 1], true);
+  });
+
+  /* ---------- transistor API used by the overlays ---------- */
+  api.setVgs = function(v){ FET.fx.vt = v; kick(); };
+  const REGION = { source:[-3.3, -0.3, ZF], gate:[0, 0.45, ZF], drain:[3.3, -0.3, ZF] };
+  function regionWorld(term){ FET.dev.updateMatrixWorld(true); const a = REGION[term]; return FET.dev.localToWorld(new THREE.Vector3(a[0], a[1], a[2])); }
+  api.origin = function(term){
+    if (current !== 'fet') { const r = stageEl.getBoundingClientRect(); return { x:r.left + r.width / 2, y:r.top + r.height / 2 }; }
+    const p = regionWorld(term).project(FET.camera); const r = canvas.getBoundingClientRect();
+    return { x: r.left + (p.x + 1) / 2 * r.width, y: r.top + (1 - p.y) / 2 * r.height };
+  };
+  // collapse the rest of the device, then fly into the source region, gate stack or drain region
+  api.enter = function(term, animate){
+    FET.busy = true; held = false; stageEl.classList.add('is-zooming'); kick();
+    const others = FET.meshes.filter(m => m.userData.term !== term);
+    others.forEach(m => { m.material.transparent = true; });
+    const camTo = p => ({ x:p.x, y:p.y + 0.25, z:p.z + 2.2 });
+    const fade = m => (m.userData.base == null ? 1 : m.userData.base) * 0.07;
+    if (!animate || RM || current !== 'fet') {
+      FET.pivot.rotation.set(0.1, 0, 0); FET.pivot.updateMatrixWorld(true);
+      others.forEach(m => { m.material.opacity = fade(m); m.position.y = m.userData.baseY - 0.5; });
+      FET.fx.dim = 0.1; FET.glow[term] = 0.5;
+      const p = regionWorld(term), c = camTo(p);
+      FET.camera.position.set(c.x, c.y, c.z); FET.look.copy(p);
+      held = current === 'fet'; frame(); held = current === 'fet';
+      return Promise.resolve();
+    }
+    return new Promise(res => {
+      const tl = G.timeline({ onComplete: () => { held = true; } });
+      tl.to(FET.pivot.rotation, { x:0.1, y:0, duration:0.55, ease:'power2.inOut' }, 0);
+      others.forEach((m, i) => {
+        tl.to(m.material, { opacity:fade(m), duration:0.5, ease:'power2.in' }, 0.12 + i * 0.012);
+        tl.to(m.position, { y:m.userData.baseY - 0.5, duration:0.55, ease:'power2.in' }, 0.12 + i * 0.012);
+      });
+      tl.to(FET.fx, { dim:0.1, duration:0.4 }, 0.1);
+      tl.to(FET.glow, { [term]:0.5, duration:0.5 }, 0.1);
+      tl.call(() => {
+        const p = regionWorld(term), c = camTo(p);
+        G.to(FET.camera.position, Object.assign({ duration:0.85, ease:'power3.inOut' }, c));
+        G.to(FET.look, { x:p.x, y:p.y, z:p.z, duration:0.85, ease:'power3.inOut' });
+      }, null, 0.56);
+      tl.call(res, null, 1.15);
+      tl.to({}, { duration:1.45 }, 0);
+    });
+  };
+  api.exit = function(animate){
+    held = false; kick();
+    const d = animate && !RM && current === 'fet' ? 0.85 : 0;
+    const restore = m => { if (!m.userData.transparent0) m.material.transparent = false; };
+    const done = () => { FET.meshes.forEach(restore); FET.busy = false; stageEl.classList.remove('is-zooming'); kick(); };
+    if (!d) {
+      FET.meshes.forEach(m => { m.material.opacity = m.userData.base == null ? 1 : m.userData.base; m.position.y = m.userData.baseY; });
+      FET.fx.dim = 1;
+      FET.camera.position.copy(FET.home.pos); FET.look.copy(FET.home.look);
+      done(); return;
+    }
+    const tl = G.timeline({ onComplete: done });
+    tl.to(FET.camera.position, { x:FET.home.pos.x, y:FET.home.pos.y, z:FET.home.pos.z, duration:d, ease:'power3.inOut' }, 0)
+      .to(FET.look, { x:FET.home.look.x, y:FET.home.look.y, z:FET.home.look.z, duration:d, ease:'power3.inOut' }, 0)
+      .to(FET.fx, { dim:1, duration:d }, d * 0.4);
+    FET.meshes.forEach(m => {
+      tl.to(m.material, { opacity:m.userData.base == null ? 1 : m.userData.base, duration:d * 0.8 }, d * 0.3);
+      tl.to(m.position, { y:m.userData.baseY, duration:d * 0.8, ease:'power2.out' }, d * 0.3);
+    });
+  };
+
+  layoutAll();
+  let rz = 0;
+  window.addEventListener('resize', () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(layoutAll); });
+  return api;
+})();
+
+/* ---- gate voltage: cut-off → saturation → triode ---- */
+function scramble(el, to){
+  if (RM) { el.textContent = to; return; }
+  const chars = '01SDGNPVX#/', start = performance.now(), dur = 520;
+  (function step(now){
+    const p = clamp((now - start) / dur, 0, 1), n = Math.floor(p * to.length);
+    let s = to.slice(0, n);
+    for (let i = n; i < to.length; i++) s += to[i] === ' ' ? ' ' : chars[(Math.random() * chars.length) | 0];
+    el.textContent = s;
+    if (p < 1) requestAnimationFrame(step);
+  })(start);
+}
+function regionName(v){ if (v < VTH) return 'Cut-off'; return (v - VTH) > VDS ? 'Triode' : 'Saturation'; }
+const vin = $('#vgs-in');
+function setVgs(v, animate, fromInput){
+  v = clamp(v, 0, VMAX);
+  if (!fromInput) vin.value = v.toFixed(2);
+  $('#vgs').textContent = v.toFixed(2) + ' V';
+  $('#idr').textContent = drainCurrent(v).toFixed(2) + ' mA';
+  const reg = regionName(v), rEl = $('#region');
+  if (rEl.textContent !== reg) { rEl.textContent = reg; rEl.dataset.r = reg.toLowerCase(); }
+  vin.setAttribute('aria-valuetext', `${v.toFixed(2)} volts, ${reg}`);
+  device.setVgs(v);
+  setOn(v >= VTH, animate);
+}
+function rampVgs(to){
+  if (RM || !window.gsap) { setVgs(to, false); return; }
+  const o = { v:parseFloat(vin.value) };
+  G.to(o, { v:to, duration:0.9, ease:'power2.inOut', onUpdate: () => setVgs(o.v, true) });
+}
+vin.addEventListener('input', () => setVgs(parseFloat(vin.value), true, true));
+function setOn(on, animate){
+  if (animate === undefined) animate = true;
+  if (ui.on === on) return;
+  ui.on = on;
+  stageEl.classList.toggle('is-on', on);
+  $('#hint').textContent = on
+    ? 'Conducting. Each terminal is now a track. Pick one to go in.'
+    : 'Raise the gate voltage past 0.5 V to switch the transistor on.';
+  LABELS.forEach(L => {
+    if (!L.term) return;
+    const tr = byTerm[L.term];
+    const name = L.el.querySelector('.tname');
+    if (animate) scramble(name, on ? (tr ? tr.name : L.name) : L.name);
+    else name.textContent = on ? (tr ? tr.name : L.name) : L.name;
+    L.el.setAttribute('aria-label', on && tr ? `${tr.name} track, ${L.name} terminal` : `${L.name} terminal`);
+  });
+}
+function terminalClick(term){
+  if (!ui.on) { rampVgs(1.0); return; }
+  const tr = byTerm[term]; if (tr) go(tr.id);
+}
+
+/* ---- overlays ---- */
+const zoom = $('#zoom'), page = $('#page');
+const state = { group:null, item:null, viaDevice:false };
+const lock = on => document.documentElement.classList.toggle('locked', on);
+const R = () => Math.ceil(Math.hypot(window.innerWidth, window.innerHeight)) + 40;
+function go(hash){ if (location.hash.slice(1) === hash) route(true); else location.hash = hash; }
+
+function fillZoom(g){
+  zoom.style.setProperty('--c', g.color);
+  const nEntries = g.list.filter(x => x.cat !== 'primer').length;
+  $('#zoom-eyebrow').textContent = `${g.terminal} terminal · ${nEntries} entries`;
+  const pr = g.list.find(x => x.cat === 'primer');
+  $('#zoom-primer').innerHTML = pr ? `<button class="primer-cta" type="button" data-id="primer">
+      <span class="pk" aria-hidden="true">Start here</span>
+      <span><span class="pt">${esc(g.name)} primer</span><span class="pd">${esc(pr.lead || '')}</span></span>
+      <span class="go" aria-hidden="true">→</span></button><p class="then">Then explore</p>` : '';
+  $('#zoom-sym').textContent = (g.terminal || g.name).charAt(0);
+  $('#zoom-title').textContent = g.name;
+  $('#zoom-blurb').textContent = g.blurb || '';
+  $('#zoom-cols').innerHTML = CATS.map(([cat, label, desc]) => {
+    const items = g.list.filter(x => x.cat === cat);
+    return `<section class="col reveal"><div class="col-head"><h3>${label}<span>${items.length}</span></h3><p>${desc}</p></div>
+      <ul class="rows">${items.map(it => `<li><button class="row" type="button" data-id="${esc(it.id)}">
+        <i class="dot ${it.status === 'ready' ? 'on' : ''}" aria-hidden="true"></i>
+        <span class="row-name">${esc(it.name)}</span>
+        <span class="row-term">${esc(it.term || '')}${it.status === 'ready' ? ' · Ready' : ''}</span></button></li>`).join('') || '<li class="empty">Nothing added yet.</li>'}</ul></section>`;
+  }).join('');
+}
+$('#zoom-primer').addEventListener('click', e => {
+  const b = e.target.closest('.primer-cta'); if (!b || !state.group) return;
+  go(`${state.group.id}--primer`);
+});
+$('#zoom-cols').addEventListener('click', e => {
+  const b = e.target.closest('.row'); if (!b || !state.group) return;
+  go(`${state.group.id}--${b.dataset.id}`);
+});
+
+async function openGroup(g, animate){
+  state.group = g;
+  fillZoom(g);
+  const anim = animate && !RM;
+  const viaDevice = device.ok && device.inView() && !pendingOrigin;
+  state.viaDevice = viaDevice;
+  if (!ui.on) setVgs(1.0, false);
+  let o;
+  if (anim && viaDevice) { await device.enter(g.term, true); o = device.origin(g.term); }
+  else { if (device.ok) await device.enter(g.term, false); o = pendingOrigin || { x:innerWidth / 2, y:innerHeight / 2 }; }
+  state.origin = o; pendingOrigin = null;
+  lock(true);
+  zoom.scrollTop = 0; zoom.hidden = false;
+  if (anim) {
+    G.fromTo(zoom, { opacity:0 }, { opacity:1, duration:0.45, ease:'power2.out' });
+    G.from('#zoom .reveal', { y:18, opacity:0, stagger:0.05, duration:0.45, delay:0.15, ease:'power3.out' });
+  } else zoom.style.opacity = '1';
+  $('#zoom-back').focus({ preventScroll:true });
+}
+
+function closeGroup(animate){
+  const g = state.group; if (!g) return Promise.resolve();
+  state.group = null;
+  const anim = animate && !RM;
+  return new Promise(res => {
+    const finish = () => {
+      zoom.hidden = true; zoom.style.opacity = '';
+      lock(false);
+      device.exit(anim && device.inView());
+      res();
+    };
+    if (anim) G.to(zoom, { opacity:0, duration:0.35, ease:'power2.in', onComplete: finish });
+    else finish();
+  });
+}
+
+/* ---- course / guide page ---- */
+const SECTIONS = [
+  ['overview','Overview'], ['units','What to cover'], ['notes','Resources'],
+  ['playlists','Playlists'], ['pyqs','Practice'], ['tips','Advice from seniors']
+];
+const CATNAME = { career:'Career', general:'General', primer:'Primer' };
+const PLAY = '<svg viewBox="0 0 12 14" aria-hidden="true"><path d="M0 0l12 7-12 7z"/></svg>';
+const linkOr = url => url ? `<a class="link" href="${esc(url)}" target="_blank" rel="noopener">Open <span aria-hidden="true">↗</span></a>` : `<span class="nolink">Link not added yet</span>`;
+const empty = '<p class="empty">Nothing added yet.</p>';
+const count = (arr, word) => arr && arr.length ? `<span class="count">${arr.length} ${word}${arr.length === 1 ? '' : 's'}</span>` : '';
+
+function renderPrimer(g, item){
+  const ph = item.philosophy || [], work = item.work || [], roles = item.roles || [];
+  let html = `<header class="doc-head">
+    <p class="eyebrow">${esc(g.name)} · Primer · read this first</p>
+    <h1 id="doc-title">${esc(item.name)}</h1>
+    ${item.draft ? '<p class="sample-note">Draft written to get you started. Rewrite it in your own words in the content file, then remove draft: true.</p>' : ''}
+  </header>`;
+  html += `<section class="sec" id="sec-overview"><div class="sec-head"><h2>Overview</h2></div>${item.lead ? `<p class="lead">${esc(item.lead)}</p>` : empty}</section>`;
+  html += `<section class="sec" id="sec-philosophy"><div class="sec-head"><h2>Philosophy</h2></div>${ph.length ? `<div class="prose">${ph.map(p => `<p>${esc(p)}</p>`).join('')}</div>` : empty}</section>`;
+  html += `<section class="sec" id="sec-work"><div class="sec-head"><h2>How the work flows</h2>${count(work,'stage')}</div>${work.length ? `<ol class="steps">${work.map(w => `<li><h3>${esc(w.title)}</h3><p>${esc(w.text)}</p></li>`).join('')}</ol>` : empty}</section>`;
+  html += `<section class="sec" id="sec-roles"><div class="sec-head"><h2>Roles once you're in</h2>${count(roles,'role')}</div>${roles.length ? `<div class="roles">${roles.map(r => `<div class="role"><h3>${esc(r.name)}</h3>${r.does ? `<p>${esc(r.does)}</p>` : ''}${r.tools ? `<p class="tl">${esc(r.tools)}</p>` : ''}</div>`).join('')}</div>` : empty}</section>`;
+  html += `<section class="sec" id="sec-next"><div class="sec-head"><h2>What next</h2></div>${item.next ? `<p class="lead">${esc(item.next)}</p>` : ''}<div class="next-row"><button class="back" type="button" data-go="${esc(g.id)}"><span aria-hidden="true">→</span> ${esc(g.name)} career &amp; general</button></div></section>`;
+  $('#doc').innerHTML = html;
+  $('#toc').innerHTML = [['overview','Overview'],['philosophy','Philosophy'],['work','The work'],['roles','Roles'],['next','What next']]
+    .map(([id, label]) => `<button type="button" data-sec="${id}">${label}</button>`).join('');
+  spy();
+}
+$('#doc').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) go(b.dataset.go); });
+
+function renderPage(g, item){
+  page.style.setProperty('--c', g.color);
+  if (item.cat === 'primer') {
+    $('#page-back').innerHTML = `<span aria-hidden="true">←</span> ${esc(g.name)}`;
+    $('#bar-title').textContent = item.name;
+    return renderPrimer(g, item);
+  }
+  $('#page-back').innerHTML = `<span aria-hidden="true">←</span> ${esc(g.name)}`;
+  $('#bar-title').textContent = item.name;
+  const ready = item.status === 'ready';
+  const units = item.units || [], notes = item.notes || [], pls = item.playlists || [], pyqs = item.pyqs || [], tips = item.tips || [];
+
+  let html = `<header class="doc-head">
+    <p class="eyebrow">${esc(g.name)} · ${CATNAME[item.cat] || ''}</p>
+    <h1 id="doc-title">${esc(item.name)}</h1>
+    <div class="meta">${item.term ? `<span class="chip">${esc(item.term)}</span>` : ''}<span class="chip ${ready ? 'is-ready' : ''}">${ready ? 'Ready' : 'Coming soon'}</span></div>
+    ${item.sample ? '<p class="sample-note">Sample content to show how a finished page looks. Swap in your own resources, links and advice in the content file.</p>' : ''}
+  </header>`;
+
+  html += `<section class="sec" id="sec-overview"><div class="sec-head"><h2>Overview</h2></div>`;
+  if (item.about || item.why) {
+    if (item.about) html += `<p class="lead">${esc(item.about)}</p>`;
+    if (item.why) html += `<div class="panel"><p class="eyebrow">Why it matters</p><p>${esc(item.why)}</p></div>`;
+  } else html += `<p class="soon-box">This page is waiting for its content. Each section below fills in as resources, playlists and advice are added.</p>`;
+  html += `</section>`;
+
+  html += `<section class="sec" id="sec-units"><div class="sec-head"><h2>What to cover</h2>${count(units,'topic')}</div>`;
+  html += units.length ? `<ol class="units">${units.map(u => `<li class="unit"><div><h3>${esc(u.title)}</h3>${(u.topics || []).length ? `<div class="tags-list">${u.topics.map(t => `<span class="t">${esc(t)}</span>`).join('')}</div>` : ''}</div></li>`).join('')}</ol>` : empty;
+  html += `</section>`;
+
+  html += `<section class="sec" id="sec-notes"><div class="sec-head"><h2>Resources</h2>${count(notes,'resource')}</div>`;
+  html += notes.length ? `<div class="cards">${notes.map(n => `<div class="card"><p class="eyebrow">${esc(n.kind || 'Resource')}</p><h3>${esc(n.title)}</h3>${n.by ? `<p class="by">${esc(n.by)}</p>` : ''}${n.note ? `<p class="note">${esc(n.note)}</p>` : ''}${linkOr(n.url)}</div>`).join('')}</div>` : empty;
+  html += `</section>`;
+
+  html += `<section class="sec" id="sec-playlists"><div class="sec-head"><h2>Playlists</h2>${count(pls,'playlist')}</div>`;
+  html += pls.length ? `<ul class="plist">${pls.map(p => `<li class="pl"><span class="play">${PLAY}</span><div class="pl-main"><span class="pl-title">${esc(p.title)}${p.pick ? '<span class="pick">Start here</span>' : ''}</span>${p.by ? `<p class="by">${esc(p.by)}</p>` : ''}${p.note ? `<p class="note">${esc(p.note)}</p>` : ''}</div>${linkOr(p.url)}</li>`).join('')}</ul>` : empty;
+  html += `</section>`;
+
+  html += `<section class="sec" id="sec-pyqs"><div class="sec-head"><h2>Practice</h2>${count(pyqs,'set')}</div>`;
+  html += pyqs.length ? `<div class="table-wrap"><table><thead><tr><th>Year</th><th>Round</th><th>Questions</th></tr></thead><tbody>${pyqs.map(q => `<tr><td class="yr">${esc(q.year)}</td><td>${esc(q.exam)}</td><td>${linkOr(q.url)}</td></tr>`).join('')}</tbody></table></div>` : empty;
+  html += `</section>`;
+
+  html += `<section class="sec" id="sec-tips"><div class="sec-head"><h2>Advice from seniors</h2>${count(tips,'tip')}</div>`;
+  html += tips.length ? `<div class="tips">${tips.map(t => `<blockquote class="tip"><p>${esc(t.text)}</p>${t.by ? `<footer>${esc(t.by)}</footer>` : ''}</blockquote>`).join('')}</div>` : empty;
+  html += `</section>`;
+
+  $('#doc').innerHTML = html;
+  $('#toc').innerHTML = SECTIONS.map(([id, label]) => `<button type="button" data-sec="${id}">${label}</button>`).join('');
+  spy();
+}
+
+$('#toc').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const sec = document.getElementById('sec-' + b.dataset.sec); if (!sec) return;
+  const top = sec.getBoundingClientRect().top - page.getBoundingClientRect().top + page.scrollTop - 70;
+  page.scrollTo({ top, behavior: RM ? 'auto' : 'smooth' });
+});
+
+let spyObs = null;
+function spy(){
+  if (spyObs) spyObs.disconnect();
+  const btns = Array.from(document.querySelectorAll('#toc button'));
+  const setOnBtn = id => btns.forEach(b => {
+    const on = b.dataset.sec === id; b.classList.toggle('is-on', on);
+    if (on && window.innerWidth <= 860) b.scrollIntoView({ block:'nearest', inline:'nearest' });
+  });
+  setOnBtn('overview');
+  spyObs = new IntersectionObserver(es => {
+    es.forEach(en => { if (en.isIntersecting) setOnBtn(en.target.id.replace('sec-', '')); });
+  }, { root: page, rootMargin:'-25% 0px -65% 0px' });
+  document.querySelectorAll('#doc .sec').forEach(s => spyObs.observe(s));
+}
+
+function openPage(g, item, animate){
+  state.item = item;
+  renderPage(g, item);
+  page.hidden = false; page.scrollTop = 0;
+  lock(true);
+  if (animate && !RM) G.fromTo(page, { opacity:0, y:28 }, { opacity:1, y:0, duration:0.45, ease:'power3.out' });
+  else { page.style.opacity = '1'; page.style.transform = 'none'; }
+  $('#page-back').focus({ preventScroll:true });
+}
+function closePage(animate){
+  if (!state.item) return Promise.resolve();
+  state.item = null;
+  return new Promise(res => {
+    const finish = () => { page.hidden = true; if (!state.group) lock(false); res(); };
+    if (animate && !RM) G.to(page, { opacity:0, y:18, duration:0.25, ease:'power2.in', onComplete: finish });
+    else finish();
+  });
+}
+
+$('#zoom-back').addEventListener('click', () => go(''));
+$('#page-back').addEventListener('click', () => { if (state.group) go(state.group.id); });
+$('#page-home').addEventListener('click', () => go(''));
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (state.item && state.group) go(state.group.id);
+  else if (state.group) go('');
+});
+
+/* ---- routing: #track or #track--entry ---- */
+let queue = Promise.resolve();
+function route(animate){ queue = queue.then(() => doRoute(animate)).catch(err => console.error(err)); }
+async function doRoute(animate){
+  let raw = '';
+  try { raw = decodeURIComponent(location.hash.slice(1)); } catch (e) { raw = ''; }
+  const parts = raw.split('--'), g = byId[parts[0]];
+  if (!g) { await closePage(animate); await closeGroup(animate); return; }
+  if (state.group && state.group.id !== g.id) { await closePage(false); await closeGroup(false); }
+  const item = parts[1] ? g.list.find(x => x.id === parts[1]) : null;
+  if (!state.group) await openGroup(g, animate && !item);
+  if (item) { if (state.item !== item) openPage(g, item, animate); }
+  else await closePage(animate);
+}
+window.addEventListener('hashchange', () => route(true));
+if (location.hash.length > 1 && device.ok) device.toFet(false);
+route(false);
+})();
+</script>

@@ -1,0 +1,202 @@
+# Pages CMS configuration: turns content.json into editable forms.
+# Edit at https://app.pagescms.org after signing in with GitHub.
+content:
+  - name: et
+    label: ET content
+    type: file
+    path: content.json
+    format: json
+    fields:
+      - name: site
+        label: Home screen
+        type: object
+        fields:
+          - { name: tagline, label: "Tagline", type: string }
+          - { name: statement, label: "Headline statement", type: text }
+          - { name: intro, label: "Intro paragraph", type: text }
+      - name: tracks
+        label: "Tracks (Analog = Source, Digital = Gate, Embedded = Drain)"
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{name}"
+        fields:
+          - { name: id, label: "ID (analog, digital or embedded)", type: string }
+          - { name: terminal, label: "Terminal (Source, Gate or Drain)", type: string }
+          - { name: name, label: "Track name", type: string }
+          - { name: color, label: "Colour (hex, e.g. #3CC8E2)", type: string }
+          - { name: blurb, label: "One-line description", type: text }
+          - name: primer
+            label: Primer (read first)
+            type: object
+            fields:
+              - { name: draft, label: "Show the draft note", type: boolean }
+              - { name: lead, label: "Overview paragraph", type: text }
+              - { name: philosophy, label: "Philosophy paragraphs", type: text, list: true }
+              - name: work
+                label: "How the work flows (stages, in order)"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - { name: title, label: "Stage", type: string }
+                  - { name: text, label: "What happens", type: text }
+              - name: roles
+                label: "Roles once you are in"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{name}"
+                fields:
+                  - { name: name, label: "Role", type: string }
+                  - { name: does, label: "What you do", type: text }
+                  - { name: tools, label: "Tools", type: string }
+              - { name: next, label: "What next", type: text }
+          - name: career
+            label: Career
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{name}"
+            fields:
+              - { name: id, label: "ID (short, no spaces, unique in this track)", type: string }
+              - { name: name, label: "Title", type: string }
+              - { name: term, label: "Small label (Guide, List, Tools, Advice)", type: string }
+              - { name: status, label: "Status: ready or soon", type: string }
+              - { name: sample, label: "Show the sample-content note", type: boolean }
+              - { name: about, label: "Overview", type: text }
+              - { name: why, label: "Why it matters", type: text }
+              - name: units
+                label: "What to cover"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - { name: title, label: "Topic", type: string }
+                  - { name: topics, label: "Points", type: string, list: true }
+              - name: notes
+                label: "Resources"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - { name: kind, label: "Kind (Book, Article, Course)", type: string }
+                  - { name: title, label: "Title", type: string }
+                  - { name: by, label: "Author / source", type: string }
+                  - { name: note, label: "Why this one", type: text }
+                  - { name: url, label: "Link", type: string }
+              - name: playlists
+                label: "Playlists"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - { name: title, label: "Title", type: string }
+                  - { name: by, label: "Channel / creator", type: string }
+                  - { name: note, label: "Why this one", type: text }
+                  - { name: url, label: "Link", type: string }
+                  - { name: pick, label: "Mark as Start here", type: boolean }
+              - name: pyqs
+                label: "Practice"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{year} {exam}"
+                fields:
+                  - { name: year, label: "Year", type: string }
+                  - { name: exam, label: "Round / exam", type: string }
+                  - { name: url, label: "Link", type: string }
+              - name: tips
+                label: "Advice from seniors"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{by}"
+                fields:
+                  - { name: text, label: "Advice", type: text }
+                  - { name: by, label: "From", type: string }
+          - name: general
+            label: General
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{name}"
+            fields:
+              - { name: id, label: "ID (short, no spaces, unique in this track)", type: string }
+              - { name: name, label: "Title", type: string }
+              - { name: term, label: "Small label (Guide, List, Tools, Advice)", type: string }
+              - { name: status, label: "Status: ready or soon", type: string }
+              - { name: sample, label: "Show the sample-content note", type: boolean }
+              - { name: about, label: "Overview", type: text }
+              - { name: why, label: "Why it matters", type: text }
+              - name: units
+                label: "What to cover"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - { name: title, label: "Topic", type: string }
+                  - { name: topics, label: "Points", type: string, list: true }
+              - name: notes
+                label: "Resources"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - { name: kind, label: "Kind (Book, Article, Course)", type: string }
+                  - { name: title, label: "Title", type: string }
+                  - { name: by, label: "Author / source", type: string }
+                  - { name: note, label: "Why this one", type: text }
+                  - { name: url, label: "Link", type: string }
+              - name: playlists
+                label: "Playlists"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - { name: title, label: "Title", type: string }
+                  - { name: by, label: "Channel / creator", type: string }
+                  - { name: note, label: "Why this one", type: text }
+                  - { name: url, label: "Link", type: string }
+                  - { name: pick, label: "Mark as Start here", type: boolean }
+              - name: pyqs
+                label: "Practice"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{year} {exam}"
+                fields:
+                  - { name: year, label: "Year", type: string }
+                  - { name: exam, label: "Round / exam", type: string }
+                  - { name: url, label: "Link", type: string }
+              - name: tips
+                label: "Advice from seniors"
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{by}"
+                fields:
+                  - { name: text, label: "Advice", type: text }
+                  - { name: by, label: "From", type: string }

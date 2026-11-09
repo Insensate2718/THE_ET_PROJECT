@@ -1,0 +1,524 @@
+{
+  "site": {
+    "tagline": "The Electronics Engineering Project",
+    "statement": "Not your generic acads drive. You know that stuff already. This is everything else.",
+    "intro": "Interviews, roles, internships, higher studies, the playlists worth your time, the tools to learn and the projects that actually teach you something. Sorted by the three directions an electronics career usually takes."
+  },
+  "tracks": [
+    {
+      "id": "analog",
+      "terminal": "Source",
+      "name": "Analog",
+      "color": "#3CC8E2",
+      "blurb": "Circuits, RF, power and analog IC design. The continuous world, and the careers built on it.",
+      "primer": {
+        "draft": true,
+        "lead": "Analog is the art of working with a continuous, imperfect world. Signals are voltages and currents that can take any value, every component is non-ideal, and every design is a negotiation between competing goals.",
+        "philosophy": [
+          "In analog design nothing comes for free. Gain, bandwidth, noise, linearity, power, supply voltage and area all pull against each other, and improving one almost always costs another. The job is to find the best compromise for one specific application.",
+          "Good analog engineers think in approximations first. They size a circuit with hand calculations and intuition, know roughly what answer to expect, and only then use simulation to confirm it. A simulator tells you what happens; understanding tells you why.",
+          "Analog is where electronics meets the physical world. Every sensor, radio, power supply and audio path starts or ends in analog, so even the most digital system depends on someone who understands it."
+        ],
+        "work": [
+          {
+            "title": "Specify",
+            "text": "Turn a system need into numbers: gain, bandwidth, noise, power, supply range, temperature range."
+          },
+          {
+            "title": "Choose and size",
+            "text": "Pick a circuit topology and size transistors and passives with hand analysis."
+          },
+          {
+            "title": "Simulate",
+            "text": "Check it in SPICE across DC, AC, transient and noise, then across process corners, temperature and mismatch."
+          },
+          {
+            "title": "Lay it out",
+            "text": "Draw the physical layout with matching, symmetry and parasitics in mind, then re-simulate with extracted parasitics."
+          },
+          {
+            "title": "Verify and tape out",
+            "text": "Pass design-rule and layout-versus-schematic checks and sign off before fabrication."
+          },
+          {
+            "title": "Bring up the silicon",
+            "text": "Measure real chips or boards in the lab, compare against simulation and debug the gaps."
+          }
+        ],
+        "roles": [
+          {
+            "name": "Analog IC design engineer",
+            "does": "Designs amplifiers, voltage references, data converters, PLLs and other blocks at transistor level.",
+            "tools": "Cadence Virtuoso, Spectre, hand analysis"
+          },
+          {
+            "name": "Analog layout engineer",
+            "does": "Turns schematics into physical layout, handling matching, parasitics and design rules.",
+            "tools": "Virtuoso Layout, Calibre"
+          },
+          {
+            "name": "RF and mixed-signal engineer",
+            "does": "Designs radio front ends (LNAs, mixers, oscillators) or ADCs and DACs that bridge analog and digital.",
+            "tools": "Spectre RF, ADS, MATLAB"
+          },
+          {
+            "name": "Power electronics / power management engineer",
+            "does": "Designs DC-DC converters, regulators and battery chargers, on chips or on boards.",
+            "tools": "LTspice, PLECS, oscilloscopes"
+          },
+          {
+            "name": "Board-level hardware engineer",
+            "does": "Designs PCBs and signal chains: sensor front ends, filters, power rails.",
+            "tools": "KiCad or Altium, LTspice, lab instruments"
+          },
+          {
+            "name": "Characterization / validation engineer",
+            "does": "Tests silicon in the lab against its spec and automates measurements.",
+            "tools": "Scopes, spectrum analyzers, Python"
+          }
+        ],
+        "next": "With the big picture in place, go to Career for interview prep and role guides, or General for playlists, tools and projects."
+      },
+      "career": [
+        {
+          "id": "core-interviews",
+          "name": "Core analog interviews",
+          "term": "Guide",
+          "status": "ready",
+          "sample": true,
+          "about": "What core electronics companies ask in analog and circuit rounds, and how to prepare for them in four to six weeks.",
+          "why": "Analog questions show up in nearly every core hardware interview, even for digital and embedded roles. Doing well here opens the most doors.",
+          "units": [
+            {
+              "title": "Fundamentals they always start with",
+              "topics": [
+                "KCL / KVL by inspection",
+                "RC and RL transients",
+                "Thevenin in your head"
+              ]
+            },
+            {
+              "title": "Diodes and BJTs",
+              "topics": [
+                "Rectifier and clipper outputs",
+                "Biasing",
+                "Small-signal gain"
+              ]
+            },
+            {
+              "title": "MOSFETs",
+              "topics": [
+                "Regions of operation",
+                "gm and ro",
+                "Body effect"
+              ]
+            },
+            {
+              "title": "Amplifiers",
+              "topics": [
+                "CS / CG / CD gain by inspection",
+                "Differential pair",
+                "Current mirrors"
+              ]
+            },
+            {
+              "title": "Op-amps",
+              "topics": [
+                "Golden rules",
+                "Non-ideal effects",
+                "Filters and integrators"
+              ]
+            },
+            {
+              "title": "Frequency response and feedback",
+              "topics": [
+                "Miller effect",
+                "Poles and stability",
+                "Phase margin"
+              ]
+            }
+          ],
+          "notes": [
+            {
+              "kind": "Book",
+              "title": "Fundamentals of Microelectronics",
+              "by": "Behzad Razavi",
+              "note": "The best book for building the intuition interviewers test.",
+              "url": ""
+            },
+            {
+              "kind": "Book",
+              "title": "Microelectronic Circuits",
+              "by": "Sedra & Smith",
+              "note": "Use it for depth on any topic you get stuck on.",
+              "url": ""
+            },
+            {
+              "kind": "Book",
+              "title": "The Art of Electronics",
+              "by": "Horowitz & Hill",
+              "note": "Practical, real-world circuits. Great for 'how would you build this' questions.",
+              "url": ""
+            }
+          ],
+          "playlists": [
+            {
+              "title": "Electronics 1 and 2 lectures",
+              "by": "Behzad Razavi",
+              "note": "Watch the amplifier and frequency-response lectures first.",
+              "url": "",
+              "pick": true
+            },
+            {
+              "title": "Analog circuits explained",
+              "by": "ALL ABOUT ELECTRONICS",
+              "note": "Quick refreshers on individual circuits the night before.",
+              "url": ""
+            }
+          ],
+          "pyqs": [
+            {
+              "year": "2025",
+              "exam": "Sample · technical round 1",
+              "url": ""
+            },
+            {
+              "year": "2025",
+              "exam": "Sample · circuit design round",
+              "url": ""
+            },
+            {
+              "year": "2024",
+              "exam": "Sample · technical round 2",
+              "url": ""
+            }
+          ],
+          "tips": [
+            {
+              "text": "Say your reasoning out loud. They care more about how you approach a circuit than the final number.",
+              "by": "Sample tip"
+            },
+            {
+              "text": "Practise finding gain by inspection until it's instant. It comes up in almost every round.",
+              "by": "Sample tip"
+            },
+            {
+              "text": "Have one project you can explain down to the component values. They will dig into it.",
+              "by": "Sample tip"
+            }
+          ]
+        },
+        {
+          "id": "analog-ic-roles",
+          "name": "Analog & mixed-signal IC roles",
+          "term": "Guide",
+          "status": "soon"
+        },
+        {
+          "id": "rf-roles",
+          "name": "RF & communication roles",
+          "term": "Guide",
+          "status": "soon"
+        },
+        {
+          "id": "power-roles",
+          "name": "Power electronics roles",
+          "term": "Guide",
+          "status": "soon"
+        },
+        {
+          "id": "gate",
+          "name": "GATE ECE",
+          "term": "Guide",
+          "status": "soon"
+        }
+      ],
+      "general": [
+        {
+          "id": "analog-playlists",
+          "name": "Best analog playlists",
+          "term": "List",
+          "status": "soon"
+        },
+        {
+          "id": "spice",
+          "name": "LTspice & simulation tools",
+          "term": "Tools",
+          "status": "soon"
+        },
+        {
+          "id": "analog-projects",
+          "name": "Projects that teach analog",
+          "term": "Advice",
+          "status": "soon"
+        },
+        {
+          "id": "analog-books",
+          "name": "Books worth owning",
+          "term": "List",
+          "status": "soon"
+        }
+      ]
+    },
+    {
+      "id": "digital",
+      "terminal": "Gate",
+      "name": "Digital",
+      "color": "#F2B33D",
+      "blurb": "RTL, verification, physical design and processors. Ones and zeros, all the way down to silicon.",
+      "primer": {
+        "draft": true,
+        "lead": "Digital design is about building enormous systems out of simple, reliable pieces. You describe behaviour at a high level, tools turn it into billions of transistors, and the hard part is making sure it is correct, fast enough and efficient.",
+        "philosophy": [
+          "Abstraction is everything. Engineers describe hardware in RTL (Verilog, SystemVerilog or VHDL), and synthesis and place-and-route tools turn that into gates and wires. Each layer hides the one below so that very large designs stay manageable.",
+          "Correctness comes first. A bug in silicon can cost months and millions to fix, so verification often takes more engineering effort than the design itself.",
+          "Every design balances power, performance and area (PPA), all governed by the clock. Meeting timing, so every signal arrives before the next clock edge, is a constant theme from architecture to sign-off."
+        ],
+        "work": [
+          {
+            "title": "Architecture",
+            "text": "Define what the chip or block does, its interfaces and its performance targets."
+          },
+          {
+            "title": "RTL design",
+            "text": "Write synthesizable hardware descriptions of the micro-architecture."
+          },
+          {
+            "title": "Verification",
+            "text": "Build testbenches, often in SystemVerilog and UVM, and drive coverage until you trust the design."
+          },
+          {
+            "title": "Synthesis and timing",
+            "text": "Map RTL to a standard-cell library and check timing with static timing analysis."
+          },
+          {
+            "title": "Physical design",
+            "text": "Floorplan, place, build the clock tree and route, then close timing and power."
+          },
+          {
+            "title": "Sign-off and silicon",
+            "text": "Pass physical and electrical checks, tape out, and validate the returned silicon."
+          }
+        ],
+        "roles": [
+          {
+            "name": "RTL / design engineer",
+            "does": "Writes and owns the RTL for blocks such as interfaces, pipelines and controllers.",
+            "tools": "SystemVerilog, simulators, lint tools"
+          },
+          {
+            "name": "Design verification (DV) engineer",
+            "does": "Builds testbenches and coverage models and finds bugs before tape-out. One of the largest hiring areas.",
+            "tools": "SystemVerilog, UVM, VCS or Xcelium"
+          },
+          {
+            "name": "Physical design engineer",
+            "does": "Takes the netlist to a routed layout that meets timing, power and area.",
+            "tools": "Innovus or ICC2, PrimeTime"
+          },
+          {
+            "name": "DFT engineer",
+            "does": "Adds test structures (scan chains, BIST) so manufactured chips can be tested.",
+            "tools": "Tessent or TetraMAX, ATPG"
+          },
+          {
+            "name": "FPGA engineer",
+            "does": "Implements designs on FPGAs for prototyping, defence, telecom and finance.",
+            "tools": "Vivado, Quartus"
+          },
+          {
+            "name": "Post-silicon validation engineer",
+            "does": "Tests real chips in the lab and debugs what simulation missed.",
+            "tools": "Lab setups, Python, debuggers"
+          }
+        ],
+        "next": "With the big picture in place, go to Career for interview prep and role guides, or General for playlists, tools and projects."
+      },
+      "career": [
+        {
+          "id": "rtl-interviews",
+          "name": "RTL design interviews",
+          "term": "Guide",
+          "status": "soon"
+        },
+        {
+          "id": "dv-roles",
+          "name": "Design verification roles",
+          "term": "Guide",
+          "status": "soon"
+        },
+        {
+          "id": "pd-roles",
+          "name": "Physical design roles",
+          "term": "Guide",
+          "status": "soon"
+        },
+        {
+          "id": "software-roles",
+          "name": "Software roles for ECE students",
+          "term": "Guide",
+          "status": "soon"
+        },
+        {
+          "id": "ms-abroad",
+          "name": "MS abroad in VLSI",
+          "term": "Guide",
+          "status": "soon"
+        }
+      ],
+      "general": [
+        {
+          "id": "digital-playlists",
+          "name": "Best digital playlists",
+          "term": "List",
+          "status": "soon"
+        },
+        {
+          "id": "hdl-tools",
+          "name": "Vivado, ModelSim & open-source tools",
+          "term": "Tools",
+          "status": "soon"
+        },
+        {
+          "id": "hdl-practice",
+          "name": "Where to practise Verilog",
+          "term": "List",
+          "status": "soon"
+        },
+        {
+          "id": "fpga-projects",
+          "name": "FPGA projects to build",
+          "term": "Advice",
+          "status": "soon"
+        }
+      ]
+    },
+    {
+      "id": "embedded",
+      "terminal": "Drain",
+      "name": "Embedded",
+      "color": "#7EDB6A",
+      "blurb": "Firmware, microcontrollers and real-time systems. Where hardware meets code and ships in products.",
+      "primer": {
+        "draft": true,
+        "lead": "Embedded engineering is writing software for hardware that has a job to do: a car's brake controller, a pacemaker, a drone, a smartwatch. It lives close to the metal, with limited memory, power and time.",
+        "philosophy": [
+          "Constraints define the work. You may have kilobytes of RAM, a battery that has to last a year, or a deadline measured in microseconds. Efficiency and predictability matter more than features.",
+          "Reliability beats cleverness. Embedded devices often can't be easily updated and failures can be dangerous, so simple, testable, well-understood code wins.",
+          "You work across the hardware-software line. You read datasheets and schematics as often as code, and debugging can mean a debugger, a logic analyser and an oscilloscope on the same problem."
+        ],
+        "work": [
+          {
+            "title": "Pick the hardware",
+            "text": "Choose a microcontroller or processor, peripherals and power budget for the product."
+          },
+          {
+            "title": "Bring up the board",
+            "text": "Get clocks, power and a debug connection (JTAG or SWD) working, then the first blinking LED."
+          },
+          {
+            "title": "Write drivers",
+            "text": "Talk to peripherals: GPIO, timers, UART, SPI, I2C, ADC, DMA and interrupts."
+          },
+          {
+            "title": "Build the application",
+            "text": "Structure the firmware, often on an RTOS such as FreeRTOS or Zephyr, with tasks and deadlines."
+          },
+          {
+            "title": "Test",
+            "text": "Unit tests, hardware-in-the-loop tests and long soak tests on real devices."
+          },
+          {
+            "title": "Ship and maintain",
+            "text": "Optimise power, add bootloaders and over-the-air updates, and meet safety or certification standards."
+          }
+        ],
+        "roles": [
+          {
+            "name": "Firmware engineer",
+            "does": "Writes low-level C/C++ for microcontrollers: drivers, peripherals, power management.",
+            "tools": "C, Keil or GCC, JTAG debuggers"
+          },
+          {
+            "name": "Embedded software engineer",
+            "does": "Builds the application layer on top of an RTOS: scheduling, communication, state machines.",
+            "tools": "FreeRTOS, Zephyr, C/C++"
+          },
+          {
+            "name": "Embedded Linux / BSP engineer",
+            "does": "Brings up Linux on custom boards: bootloaders, device trees, kernel drivers.",
+            "tools": "Yocto, U-Boot, kernel"
+          },
+          {
+            "name": "Automotive embedded engineer",
+            "does": "Develops ECU software under automotive standards and safety rules.",
+            "tools": "AUTOSAR, CAN, ISO 26262"
+          },
+          {
+            "name": "IoT engineer",
+            "does": "Connects devices: BLE, Wi-Fi, cellular, cloud protocols, low-power design.",
+            "tools": "ESP-IDF, nRF SDK, MQTT"
+          },
+          {
+            "name": "Embedded test / validation engineer",
+            "does": "Builds test rigs and automated hardware-in-the-loop tests.",
+            "tools": "Python, HIL rigs, lab instruments"
+          }
+        ],
+        "next": "With the big picture in place, go to Career for interview prep and role guides, or General for playlists, tools and projects."
+      },
+      "career": [
+        {
+          "id": "firmware-interviews",
+          "name": "Firmware & embedded interviews",
+          "term": "Guide",
+          "status": "soon"
+        },
+        {
+          "id": "automotive",
+          "name": "Automotive embedded roles",
+          "term": "Guide",
+          "status": "soon"
+        },
+        {
+          "id": "embedded-internships",
+          "name": "Finding embedded internships",
+          "term": "Guide",
+          "status": "soon"
+        },
+        {
+          "id": "embedded-resume",
+          "name": "Resume & projects that get shortlisted",
+          "term": "Guide",
+          "status": "soon"
+        }
+      ],
+      "general": [
+        {
+          "id": "embedded-playlists",
+          "name": "Best embedded playlists",
+          "term": "List",
+          "status": "soon"
+        },
+        {
+          "id": "boards",
+          "name": "Arduino, STM32 & ESP32: where to start",
+          "term": "Tools",
+          "status": "soon"
+        },
+        {
+          "id": "embedded-projects",
+          "name": "Projects that teach the most",
+          "term": "Advice",
+          "status": "soon"
+        },
+        {
+          "id": "clubs",
+          "name": "Clubs & competitions",
+          "term": "Advice",
+          "status": "soon"
+        }
+      ]
+    }
+  ]
+}
