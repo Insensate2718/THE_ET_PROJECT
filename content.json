@@ -6,18 +6,18 @@
   },
   "tracks": [
     {
-      "id": "analog",
+      "id": "Analog",
       "terminal": "Source",
       "name": "Analog",
       "color": "#3CC8E2",
-      "blurb": "Circuits, RF, power and analog IC design. The continuous world, and the careers built on it.",
+      "blurb": "RF, Power, Comms and IC design. The continuous world, and the careers built on it.\n\n",
       "primer": {
         "draft": true,
         "lead": "Analog is the art of working with a continuous, imperfect world. Signals are voltages and currents that can take any value, every component is non-ideal, and every design is a negotiation between competing goals.",
         "philosophy": [
-          "In analog design nothing comes for free. Gain, bandwidth, noise, linearity, power, supply voltage and area all pull against each other, and improving one almost always costs another. The job is to find the best compromise for one specific application.",
-          "Good analog engineers think in approximations first. They size a circuit with hand calculations and intuition, know roughly what answer to expect, and only then use simulation to confirm it. A simulator tells you what happens; understanding tells you why.",
-          "Analog is where electronics meets the physical world. Every sensor, radio, power supply and audio path starts or ends in analog, so even the most digital system depends on someone who understands it."
+          "You will probably spend most of your time \"building intuition\". The term will get thrown around a lot, and for good reason. Your value comes from the fact that you can predict what the circuit will do before you analyze/build it. Otherwise, any run of the mill SPICE tool is worth more than you. \n\nFIRST LESSON: BUILD INTUITION. ",
+          "The analog you will study is based on a \"model\". Once you have an ideal model, you can start adding non-idealities. The model can span from something as simple as a capcitor to something more complex as an Op-Amp. Your entire preliminary journey is defined by how well you understand \"THE MODEL\".  \n\nSECOND LESSON: KNOW EVERY PART OF THE MODEL",
+          "You're fucked once you resort to Laplace domain. Laplace domain conversion is useful only because it converts differential equations to algebraic forms and modern computers are very good at handling algebraic equations. By resorting to  s-domain you get 0% idea of how the circuit works and 100% idea of how to take up 3 pages worth of calculations.\n\nTHIRD LESSON: NEVER GO TO S-DOMAIN"
         ],
         "work": [
           {
