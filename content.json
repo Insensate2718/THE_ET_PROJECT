@@ -1,8 +1,8 @@
 {
   "site": {
-    "tagline": "The Electronics Engineering Project",
-    "statement": "Not your generic acads drive. You know that stuff already. This is everything else.",
-    "intro": "Interviews, roles, internships, higher studies, the playlists worth your time, the tools to learn and the projects that actually teach you something. Sorted by the three directions an electronics career usually takes."
+    "tagline": "A gift",
+    "statement": "Not an acads drive. ",
+    "intro": "Interviews, roles, internships, higher studies, the playlists worth your time and the tools to learn . Sorted by the three directions an electronics career usually takes."
   },
   "tracks": [
     {
@@ -143,22 +143,19 @@
               "kind": "Book",
               "title": "Fundamentals of Microelectronics",
               "by": "Behzad Razavi",
-              "note": "The best book for building the intuition interviewers test.",
-              "url": ""
+              "note": "The best book for building the intuition interviewers test."
             },
             {
               "kind": "Book",
               "title": "Microelectronic Circuits",
               "by": "Sedra & Smith",
-              "note": "Use it for depth on any topic you get stuck on.",
-              "url": ""
+              "note": "Use it for depth on any topic you get stuck on."
             },
             {
               "kind": "Book",
               "title": "The Art of Electronics",
               "by": "Horowitz & Hill",
-              "note": "Practical, real-world circuits. Great for 'how would you build this' questions.",
-              "url": ""
+              "note": "Practical, real-world circuits. Great for 'how would you build this' questions."
             }
           ],
           "playlists": [
@@ -166,31 +163,27 @@
               "title": "Electronics 1 and 2 lectures",
               "by": "Behzad Razavi",
               "note": "Watch the amplifier and frequency-response lectures first.",
-              "url": "",
               "pick": true
             },
             {
               "title": "Analog circuits explained",
               "by": "ALL ABOUT ELECTRONICS",
               "note": "Quick refreshers on individual circuits the night before.",
-              "url": ""
+              "pick": false
             }
           ],
           "pyqs": [
             {
               "year": "2025",
-              "exam": "Sample · technical round 1",
-              "url": ""
+              "exam": "Sample · technical round 1"
             },
             {
               "year": "2025",
-              "exam": "Sample · circuit design round",
-              "url": ""
+              "exam": "Sample · circuit design round"
             },
             {
               "year": "2024",
-              "exam": "Sample · technical round 2",
-              "url": ""
+              "exam": "Sample · technical round 2"
             }
           ],
           "tips": [
@@ -212,25 +205,29 @@
           "id": "analog-ic-roles",
           "name": "Analog & mixed-signal IC roles",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "rf-roles",
           "name": "RF & communication roles",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "power-roles",
           "name": "Power electronics roles",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "gate",
           "name": "GATE ECE",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         }
       ],
       "general": [
@@ -238,25 +235,29 @@
           "id": "analog-playlists",
           "name": "Best analog playlists",
           "term": "List",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "spice",
           "name": "LTspice & simulation tools",
           "term": "Tools",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "analog-projects",
           "name": "Projects that teach analog",
           "term": "Advice",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "analog-books",
           "name": "Books worth owning",
           "term": "List",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         }
       ]
     },
@@ -339,31 +340,36 @@
           "id": "rtl-interviews",
           "name": "RTL design interviews",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "dv-roles",
           "name": "Design verification roles",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "pd-roles",
           "name": "Physical design roles",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "software-roles",
           "name": "Software roles for ECE students",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "ms-abroad",
           "name": "MS abroad in VLSI",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         }
       ],
       "general": [
@@ -371,25 +377,29 @@
           "id": "digital-playlists",
           "name": "Best digital playlists",
           "term": "List",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "hdl-tools",
           "name": "Vivado, ModelSim & open-source tools",
           "term": "Tools",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "hdl-practice",
           "name": "Where to practise Verilog",
           "term": "List",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "fpga-projects",
           "name": "FPGA projects to build",
           "term": "Advice",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         }
       ]
     },
@@ -472,25 +482,29 @@
           "id": "firmware-interviews",
           "name": "Firmware & embedded interviews",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "automotive",
           "name": "Automotive embedded roles",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "embedded-internships",
           "name": "Finding embedded internships",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "embedded-resume",
           "name": "Resume & projects that get shortlisted",
           "term": "Guide",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         }
       ],
       "general": [
@@ -498,25 +512,29 @@
           "id": "embedded-playlists",
           "name": "Best embedded playlists",
           "term": "List",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "boards",
           "name": "Arduino, STM32 & ESP32: where to start",
           "term": "Tools",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "embedded-projects",
           "name": "Projects that teach the most",
           "term": "Advice",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         },
         {
           "id": "clubs",
           "name": "Clubs & competitions",
           "term": "Advice",
-          "status": "soon"
+          "status": "soon",
+          "sample": false
         }
       ]
     }
